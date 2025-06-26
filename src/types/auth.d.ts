@@ -1,5 +1,5 @@
 import type { Sex } from './sex'
-import type { UserDto } from './user'
+import type { UserDto, UserRole } from './user'
 
 export interface LoginResponseDto {
   token: string
@@ -33,4 +33,18 @@ export interface Patient {
   age: number
   gender: string
   condition?: string
+}
+
+export interface AccessTokenPayload {
+  id: string
+  email: string
+  role: string
+  iat: number
+  exp: number
+}
+
+export interface AuthUser {
+  id: string
+  email: string
+  role: UserRole
 }

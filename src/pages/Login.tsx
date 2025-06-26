@@ -1,9 +1,13 @@
+import { useNavigate } from 'react-router'
 import { LoginForm, type FormValues } from '../components/forms/LoginForm'
+import { login } from '../services/auth.service'
 
 export function Login() {
+  const navigate = useNavigate()
+
   const handleSubmit = async (values: FormValues) => {
-    console.log('email', values.email)
-    console.log('password', values.password)
+    await login(values)
+    navigate('/admin', { replace: true })
   }
 
   return (

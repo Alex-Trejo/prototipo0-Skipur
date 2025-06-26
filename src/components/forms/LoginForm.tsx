@@ -46,7 +46,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
             <img
               className="max-w-[120px] mx-auto"
               src={Logo}
-              alt="Logotipo de la Fundacion Carlitos"
+              alt="Logotipo de la Fundación Carlitos"
             />
             <p className="text-center text-2xl font-semibold m-0">
               Bienvenido de nuevo
@@ -77,8 +77,9 @@ export function LoginForm({ onSubmit, onError }: Props) {
           </div>
           {error && <p className="text-red-500 text-center">{error}</p>}
           <button
-            className="py-3 text-center text-white bg-blue-500 rounded-md cursor-pointer"
+            className="py-3 text-center text-white bg-blue-500 rounded-md"
             type="submit"
+            disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
               {isSubmitting && (

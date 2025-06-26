@@ -1,0 +1,29 @@
+button {
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+
+  th {
+    text-align: start;
+  }
+
+  td,
+  th {
+    padding: 8px 12px;
+  }
+
+  tbody tr {
+    border-top: 1px solid #d1d5dc;
+    border-bottom: 1px solid #d1d5dc;
+  }
+
+  tbody tr:nth-child(odd) {
+    background-color: #f3f4f6;
+  }
+
+  td[colspan]:not([colspan='1']) {
+    text-align: center;
+  }
+}

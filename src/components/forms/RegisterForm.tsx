@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik'
 import { ImSpinner8 } from 'react-icons/im'
 import { getSexOptions } from '../../utils/sex.utils'
-import { Sex } from '../../types/sex'
 import * as Yup from 'yup'
 import {
   isFullName,
@@ -11,24 +10,15 @@ import {
   MIN_AGE,
 } from '../../utils/form.utils'
 import { Link } from 'react-router'
+import type { Register } from '../../types/auth'
 
-export interface FormValues {
-  representativeName: string
-  representativeEmail: string
-  representativePhone: string
-  patientName: string
-  patientAge: number
-  patientSex: Sex
-  medicalCondition: string
-}
-
-const initialValues: FormValues = {
+const initialValues: Register = {
   representativeName: '',
   representativeEmail: '',
   representativePhone: '',
   patientName: '',
   patientAge: MIN_AGE,
-  patientSex: Sex.Female,
+  patientSex: 'FEMENINO',
   medicalCondition: '',
 }
 
@@ -58,8 +48,11 @@ const validationSchema = Yup.object({
       'La edad ingresada no esta permitida',
       isValidAge
     ),
-  patientSex: Yup.number()
-    .oneOf(Object.values(Sex), 'Este campo es obligatorio')
+  patientSex: Yup.string()
+    .oneOf(
+      getSexOptions().map((o) => o.value),
+      'Este campo es obligatorio'
+    )
     .required('Este campo es obligatorio'),
   medicalCondition: Yup.string()
     .min(3, 'El texto es muy corto')
@@ -67,14 +60,14 @@ const validationSchema = Yup.object({
 })
 
 interface Props {
-  onSubmit?: (values: FormValues) => void | Promise<void>
+  onSubmit?: (values: Register) => void | Promise<void>
   onError?: () => void
 }
 
 export function RegisterForm({ onSubmit, onError }: Props) {
   const handleSubmit = async (
-    values: FormValues,
-    { setSubmitting, resetForm }: FormikHelpers<FormValues>
+    values: Register,
+    { setSubmitting, resetForm }: FormikHelpers<Register>
   ) => {
     try {
       await onSubmit?.(values)
@@ -189,7 +182,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
               name="patientSex"
               as="select"
             >
-              <option value={-1}>Seleccionar</option>
+              <option value={''}>Seleccionar</option>
               {getSexOptions().map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -218,8 +211,9 @@ export function RegisterForm({ onSubmit, onError }: Props) {
             />
           </div>
           <button
-            className="py-3 text-center text-white bg-blue-500 rounded-md cursor-pointer"
+            className="py-3 text-center text-white bg-blue-500 rounded-md"
             type="submit"
+            disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
               {isSubmitting && (

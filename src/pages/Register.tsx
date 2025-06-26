@@ -1,18 +1,22 @@
 import { useState } from 'react'
-import { RegisterForm, type FormValues } from '../components/forms/RegisterForm'
-import { Modal, type ModalData } from '../components/modals/Modal'
+import { RegisterForm } from '../components/forms/RegisterForm'
+import {
+  MessageModal,
+  type MessageModalData,
+} from '../components/modals/MessageModal'
 import { useNavigate } from 'react-router'
+import type { Register } from '../types/auth'
 
 export function Register() {
   const navigate = useNavigate()
-  const [modalData, setModalData] = useState<ModalData>({
+  const [modalData, setModalData] = useState<MessageModalData>({
     message: '',
     open: false,
     title: 'Registro de nuevo paciente',
     type: 'info',
   })
 
-  const handleSubmit = async (values: FormValues) => {
+  const handleSubmit = async (values: Register) => {
     console.log(values)
 
     setModalData((data) => ({
@@ -43,7 +47,7 @@ export function Register() {
   return (
     <main className="bg-slate-300 min-h-dvh flex justify-center items-center p-10">
       <RegisterForm onSubmit={handleSubmit} onError={handleError} />
-      <Modal
+      <MessageModal
         type={modalData.type}
         title={modalData.title}
         message={modalData.message}

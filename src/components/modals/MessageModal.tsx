@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react'
 import { MdOutlineError, MdOutlineInfo, MdOutlineWarning } from 'react-icons/md'
 
-type ModalType = 'info' | 'error' | 'warn'
+type MessageModalType = 'info' | 'error' | 'warn'
 
-function ModalIcon({ type }: { type: ModalType }) {
+function MessageModalIcon({ type }: { type: MessageModalType }) {
   const baseClass = 'min-w-[28px] min-h-[28px]'
-  const icons: Record<ModalType, ReactElement> = {
+  const icons: Record<MessageModalType, ReactElement> = {
     info: <MdOutlineInfo className={`${baseClass} text-gray-400`} />,
     error: <MdOutlineError className={`${baseClass} text-red-400`} />,
     warn: <MdOutlineWarning className={`${baseClass} text-yellow-400`} />,
@@ -13,18 +13,18 @@ function ModalIcon({ type }: { type: ModalType }) {
   return icons[type] ?? icons.info
 }
 
-export interface ModalData {
+export interface MessageModalData {
   title: string
   message: string
-  type?: ModalType
+  type?: MessageModalType
   open?: boolean
 }
 
-interface Props extends ModalData {
+interface Props extends MessageModalData {
   onAccept?: () => void
 }
 
-export function Modal({
+export function MessageModal({
   message,
   title,
   type = 'info',
@@ -34,16 +34,16 @@ export function Modal({
   if (!open) return null
 
   return (
-    <dialog className="fixed w-dvw h-dvh inset-0 z-50 backdrop-blur-xs  flex items-center justify-center bg-black/30 p-20">
+    <dialog className="fixed w-dvw h-dvh inset-0 z-50 backdrop-blur-xs flex items-center justify-center bg-black/30 p-20">
       <aside className="bg-white p-6 rounded-md border border-gray-300 flex flex-col gap-y-4 w-fit max-w-[360px]">
         <h6 className="font-semibold text-2xl">{title}</h6>
         <div className="flex justify-between items-center gap-x-6">
-          <ModalIcon type={type} />
+          <MessageModalIcon type={type} />
           <p>{message}</p>
         </div>
         <div className="flex justify-center">
           <button
-            className="bg-blue-500 rounded-md p-2 min-w-[84px] text-white cursor-pointer"
+            className="bg-blue-500 rounded-md p-2 min-w-[84px] text-white"
             type="button"
             onClick={onAccept}
           >

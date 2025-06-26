@@ -2,8 +2,9 @@ import { Field, Form, Formik, type FormikHelpers } from 'formik'
 import Logo from '../../assets/images/logo.png'
 import { useState } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
+import { Link } from 'react-router'
 
-interface FormValues {
+export interface FormValues {
   email: string
   password: string
 }
@@ -23,7 +24,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
 
   const handleSubmit = async (
     values: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>
+    { setSubmitting, resetForm }: FormikHelpers<FormValues>
   ) => {
     try {
       setError(null)
@@ -33,6 +34,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
       setError('Email o contraseña incorrectos')
     } finally {
       setSubmitting(false)
+      resetForm()
     }
   }
 
@@ -46,7 +48,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
               src={Logo}
               alt="Logotipo de la Fundacion Carlitos"
             />
-            <p className="text-center text-2xl font-[500] m-0">
+            <p className="text-center text-2xl font-semibold m-0">
               Bienvenido de nuevo
             </p>
             <p className="text-center m-0">
@@ -60,6 +62,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
               id="email"
               name="email"
               type="email"
+              required
             />
           </div>
           <div className="inline-flex flex-col gap-y-2">
@@ -69,6 +72,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
               id="password"
               name="password"
               type="password"
+              required
             />
           </div>
           {error && <p className="text-red-500 text-center">{error}</p>}
@@ -85,9 +89,9 @@ export function LoginForm({ onSubmit, onError }: Props) {
           </button>
           <p className="text-center">
             ¿No tienes cuenta?{' '}
-            <a className="text-blue-500" href="/register">
+            <Link className="text-blue-500" to="/register">
               Regístrate aquí
-            </a>
+            </Link>
           </p>
         </Form>
       )}

@@ -1,14 +1,9 @@
-import { LoginForm } from '../components/forms/LoginForm'
-
-interface LoginValues {
-  email: string
-  password: string
-}
+import { LoginForm, type FormValues } from '../components/forms/LoginForm'
 
 export function Login() {
-  const handleSubmit = async ({ email, password }: LoginValues) => {
-    console.log('email', email)
-    console.log('password', password)
+  const handleSubmit = async (values: FormValues) => {
+    console.log('email', values.email)
+    console.log('password', values.password)
   }
 
   return (

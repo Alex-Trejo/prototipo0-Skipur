@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getAllSpecialties } from '../services/specialties.service'
+import { getAllSpecialties } from '../api/specialty'
 import { type Specialty } from '../types/specialty'
 
 export function useSpecialties() {

@@ -6,6 +6,7 @@ import { AdminLayout } from './components/layouts/Admin'
 import { AdminHome } from './pages/Admin'
 import { Specialties } from './pages/Specialties'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
+import { NotFound } from './pages/NotFound'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path="specialties" element={<Specialties />} />
         </Route>
       </Route>
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

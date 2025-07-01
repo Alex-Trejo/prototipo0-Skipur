@@ -1,4 +1,10 @@
 export interface Specialty {
+  id: string
+  name: string
+  description: string
+}
+
+export interface SpecialtyFormValues {
   id?: string
   name: string
   description: string
@@ -12,12 +18,12 @@ export interface SpecialtyDto {
   created_at: Date
 }
 
-export interface PostSpecialtyDto {
+export interface CreateSpecialtyDto {
   name: string
   description: string
 }
 
-export interface PutSpecialtyDto {
+export interface UpdateSpecialtyDto {
   name?: string
   description?: string
 }

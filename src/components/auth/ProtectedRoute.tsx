@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router'
 import type { UserRole } from '../../types/user'
-import { getAuthUser } from '../../utils/auth.utils'
-import { HOME_PATH_BY_ROLE } from '../../constants/auth.constants'
+import { getAuthUser } from '../../utils/auth'
+import { ROLE_HOME_PATHS } from '../../constants/routes'
 
 interface Props {
   allowedRoles: UserRole[]
@@ -15,7 +15,7 @@ export function ProtectedRoute({ allowedRoles }: Props) {
   }
 
   if (!allowedRoles.includes(authUser.role)) {
-    return <Navigate to={HOME_PATH_BY_ROLE[authUser.role]} replace />
+    return <Navigate to={ROLE_HOME_PATHS[authUser.role]} replace />
   }
 
   return <Outlet />

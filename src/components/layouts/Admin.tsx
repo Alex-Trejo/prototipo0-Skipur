@@ -3,13 +3,14 @@ import Logo from '../../assets/images/logo.png'
 import { FaStethoscope } from 'react-icons/fa'
 import { MdLogout } from 'react-icons/md'
 import { useCallback } from 'react'
-import { logout } from '../../services/auth.service'
+import { logout } from '../../utils/auth'
 
 export function AdminLayout() {
   const location = useLocation()
   const navigate = useNavigate()
 
   const closeSession = () => {
+    // TODO: move to services
     logout()
     navigate('/', { replace: true })
   }

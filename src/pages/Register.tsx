@@ -5,7 +5,7 @@ import {
   type MessageModalData,
 } from '../components/modals/MessageModal'
 import { useNavigate } from 'react-router'
-import type { Register } from '../types/auth'
+import type { PatientRegistrationFormValues } from '../types/patient'
 
 export function Register() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export function Register() {
     type: 'info',
   })
 
-  const handleSubmit = async (values: Register) => {
+  const handleSubmit = async (values: PatientRegistrationFormValues) => {
     console.log(values)
 
     setModalData((data) => ({

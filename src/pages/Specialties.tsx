@@ -5,7 +5,7 @@ import {
   SpecialtyModal,
 } from '../components/modals/SpecialtyModal'
 import { useEffect, useState } from 'react'
-import type { Specialty } from '../types/specialty'
+import type { Specialty, SpecialtyFormValues } from '../types/specialty'
 import {
   MessageModal,
   type MessageModalData,
@@ -15,7 +15,7 @@ import {
   createSpecialty,
   deleteSpecialty,
   updateSpecialty,
-} from '../services/specialties.service'
+} from '../api/specialty'
 
 export function Specialties() {
   const { specialties: initialSpecialties } = useSpecialties()
@@ -63,7 +63,7 @@ export function Specialties() {
     setSpecialties(initialSpecialties)
   }, [initialSpecialties])
 
-  const addSpecialty = async (specialty: Specialty) => {
+  const addSpecialty = async (specialty: SpecialtyFormValues) => {
     try {
       const newSpecialty = await createSpecialty(specialty)
       setSpecialties((specialties) => {
@@ -88,11 +88,11 @@ export function Specialties() {
     }
   }
 
-  const modifySpecialty = async (specialty: Specialty) => {
+  const modifySpecialty = async (specialty: SpecialtyFormValues) => {
     try {
-      await updateSpecialty(specialty)
+      const updatedSpecialty = await updateSpecialty(specialty)
       setSpecialties((specialties) =>
-        specialties.map((s) => (s.id === specialty.id ? specialty : s))
+        specialties.map((s) => (s.id === specialty.id ? updatedSpecialty : s))
       )
       closeSpecialtyModal()
       setMessageModal((m) => ({

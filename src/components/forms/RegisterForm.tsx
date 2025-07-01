@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik'
 import { ImSpinner8 } from 'react-icons/im'
-import { getSexOptions } from '../../utils/sex.utils'
+import { getSexOptions } from '../../utils/sex'
 import * as Yup from 'yup'
 import {
   isFullName,
@@ -8,11 +8,11 @@ import {
   isValidAge,
   MAX_AGE,
   MIN_AGE,
-} from '../../utils/form.utils'
+} from '../../utils/validation'
 import { Link } from 'react-router'
-import type { Register } from '../../types/auth'
+import type { PatientRegistrationFormValues } from '../../types/patient'
 
-const initialValues: Register = {
+const initialValues: PatientRegistrationFormValues = {
   representativeName: '',
   representativeEmail: '',
   representativePhone: '',
@@ -60,14 +60,14 @@ const validationSchema = Yup.object({
 })
 
 interface Props {
-  onSubmit?: (values: Register) => void | Promise<void>
+  onSubmit?: (values: PatientRegistrationFormValues) => void | Promise<void>
   onError?: () => void
 }
 
 export function RegisterForm({ onSubmit, onError }: Props) {
   const handleSubmit = async (
-    values: Register,
-    { setSubmitting, resetForm }: FormikHelpers<Register>
+    values: PatientRegistrationFormValues,
+    { setSubmitting, resetForm }: FormikHelpers<PatientRegistrationFormValues>
   ) => {
     try {
       await onSubmit?.(values)

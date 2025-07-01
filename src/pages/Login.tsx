@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router'
 import { LoginForm, type FormValues } from '../components/forms/LoginForm'
-import { login } from '../services/auth.service'
-import { HOME_PATH_BY_ROLE } from '../constants/auth.constants'
+import { login } from '../api/auth'
+import { ROLE_HOME_PATHS } from '../constants/routes'
 
 export function Login() {
   const navigate = useNavigate()
 
   const handleSubmit = async (values: FormValues) => {
     const user = await login(values)
-    navigate(HOME_PATH_BY_ROLE[user.role], { replace: true })
+    navigate(ROLE_HOME_PATHS[user.role], { replace: true })
   }
 
   return (

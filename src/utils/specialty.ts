@@ -1,8 +1,9 @@
 import type {
-  PostSpecialtyDto,
-  PutSpecialtyDto,
+  CreateSpecialtyDto,
+  UpdateSpecialtyDto,
   Specialty,
   SpecialtyDto,
+  SpecialtyFormValues,
 } from '../types/specialty'
 
 export function mapFromSpecialtyDto(specialtyDto: SpecialtyDto): Specialty {
@@ -13,14 +14,18 @@ export function mapFromSpecialtyDto(specialtyDto: SpecialtyDto): Specialty {
   }
 }
 
-export function mapToPostSpecialtyDto(specialty: Specialty): PostSpecialtyDto {
+export function mapToCreateSpecialtyDto(
+  specialty: SpecialtyFormValues
+): CreateSpecialtyDto {
   return {
     description: specialty.description,
     name: specialty.name,
   }
 }
 
-export function mapToPutSpecialtyDto(specialty: Specialty): PutSpecialtyDto {
+export function mapToUpdateSpecialtyDto(
+  specialty: SpecialtyFormValues
+): UpdateSpecialtyDto {
   return {
     description: specialty.description,
     name: specialty.name,

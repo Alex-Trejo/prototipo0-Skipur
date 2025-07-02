@@ -3,16 +3,26 @@ import { ImSpinner8 } from 'react-icons/im'
 import { getSexOptions } from '../../utils/sex'
 import * as Yup from 'yup'
 import {
-  isFullName,
-  isPhoneNumber,
-  isValidAge,
+  isValidFullName,
+  isValidPhoneNumber,
+  isAgeInRange,
   MAX_AGE,
   MIN_AGE,
 } from '../../utils/validation'
 import { Link } from 'react-router'
-import type { PatientRegistrationFormValues } from '../../types/patient'
+import type { Sex } from '../../types/sex'
 
-const initialValues: PatientRegistrationFormValues = {
+export interface FormValues {
+  representativeName: string
+  representativeEmail: string
+  representativePhone: string
+  patientName: string
+  patientAge: number
+  patientSex: Sex
+  medicalCondition: string
+}
+
+const initialValues: FormValues = {
   representativeName: '',
   representativeEmail: '',
   representativePhone: '',
@@ -26,7 +36,11 @@ const validationSchema = Yup.object({
   representativeName: Yup.string()
     .required('Este campo es obligatorio')
     .max(50, 'El nombre es muy largo. Ingrese solo nombre y apellido')
-    .test('is-fullname-test', 'Debe ingresar nombre y apellido', isFullName),
+    .test(
+      'is-fullname-test',
+      'Debe ingresar nombre y apellido',
+      isValidFullName
+    ),
   representativeEmail: Yup.string()
     .email('Ingrese un correo electronico válido')
     .required('Este campo es obligatorio'),
@@ -35,18 +49,22 @@ const validationSchema = Yup.object({
     .test(
       'is-phoneNumber-test',
       'Formato de teléfono incorrecto (Ejm: 0986237104)',
-      isPhoneNumber
+      isValidPhoneNumber
     ),
   patientName: Yup.string()
     .required('Este campo es obligatorio')
     .max(50, 'El nombre es muy largo. Ingrese solo nombre y apellido')
-    .test('is-fullname-test', 'Debe ingresar nombre y apellido', isFullName),
+    .test(
+      'is-fullname-test',
+      'Debe ingresar nombre y apellido',
+      isValidFullName
+    ),
   patientAge: Yup.number()
     .required('Este campo es obligatorio')
     .test(
       'is-valid-age-test',
       'La edad ingresada no esta permitida',
-      isValidAge
+      isAgeInRange
     ),
   patientSex: Yup.string()
     .oneOf(
@@ -60,14 +78,14 @@ const validationSchema = Yup.object({
 })
 
 interface Props {
-  onSubmit?: (values: PatientRegistrationFormValues) => void | Promise<void>
+  onSubmit?: (values: FormValues) => void | Promise<void>
   onError?: () => void
 }
 
 export function RegisterForm({ onSubmit, onError }: Props) {
   const handleSubmit = async (
-    values: PatientRegistrationFormValues,
-    { setSubmitting, resetForm }: FormikHelpers<PatientRegistrationFormValues>
+    values: FormValues,
+    { setSubmitting, resetForm }: FormikHelpers<FormValues>
   ) => {
     try {
       await onSubmit?.(values)

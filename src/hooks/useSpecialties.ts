@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { getAllSpecialties } from '../api/specialty'
 import { type Specialty } from '../types/specialty'
+import { getSpecialties } from '../services/specialty'
 
 export function useSpecialties() {
   const [specialties, setSpecialties] = useState<Specialty[]>([])
 
   useEffect(() => {
-    getAllSpecialties().then((s) => setSpecialties(s))
+    getSpecialties().then((s) => setSpecialties(s))
   }, [])
 
   return {

@@ -5,7 +5,7 @@ import {
   SpecialtyModal,
 } from '../components/modals/SpecialtyModal'
 import { useEffect, useState } from 'react'
-import type { Specialty, SpecialtyFormValues } from '../types/specialty'
+import type { Specialty } from '../types/specialty'
 import {
   MessageModal,
   type MessageModalData,
@@ -15,7 +15,9 @@ import {
   createSpecialty,
   deleteSpecialty,
   updateSpecialty,
-} from '../api/specialty'
+} from '../services/specialty'
+import type { FormValues } from '../components/forms/SpecialtyForm'
+import { mapToUpdateSpecialty } from '../utils/specialty'
 
 export function Specialties() {
   const { specialties: initialSpecialties } = useSpecialties()
@@ -63,7 +65,7 @@ export function Specialties() {
     setSpecialties(initialSpecialties)
   }, [initialSpecialties])
 
-  const addSpecialty = async (specialty: SpecialtyFormValues) => {
+  const addSpecialty = async (specialty: FormValues) => {
     try {
       const newSpecialty = await createSpecialty(specialty)
       setSpecialties((specialties) => {
@@ -88,11 +90,20 @@ export function Specialties() {
     }
   }
 
-  const modifySpecialty = async (specialty: SpecialtyFormValues) => {
+  const modifySpecialty = async (form: FormValues) => {
     try {
-      const updatedSpecialty = await updateSpecialty(specialty)
+      const id = form.id
+      const specialty = mapToUpdateSpecialty(form)
+
+      if (!id)
+        throw new Error(
+          'No se ha proporcionado un ID de especialidad para actualizar'
+        )
+
+      const updatedSpecialty = await updateSpecialty(id, specialty)
+
       setSpecialties((specialties) =>
-        specialties.map((s) => (s.id === specialty.id ? updatedSpecialty : s))
+        specialties.map((s) => (s.id === id ? updatedSpecialty : s))
       )
       closeSpecialtyModal()
       setMessageModal((m) => ({

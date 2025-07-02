@@ -29,12 +29,12 @@ export function LoginForm({ onSubmit, onError }: Props) {
     try {
       setError(null)
       await onSubmit?.(values)
+      resetForm()
     } catch {
-      onError?.()
       setError('Email o contraseña incorrectos')
+      onError?.()
     } finally {
       setSubmitting(false)
-      resetForm()
     }
   }
 

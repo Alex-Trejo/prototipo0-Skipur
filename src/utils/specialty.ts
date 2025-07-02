@@ -1,10 +1,19 @@
+import type { FormValues } from '../components/forms/SpecialtyForm'
 import type {
   CreateSpecialtyDto,
   UpdateSpecialtyDto,
   Specialty,
   SpecialtyDto,
-  SpecialtyFormValues,
+  CreateSpecialty,
+  UpdateSpecialty,
 } from '../types/specialty'
+
+export function mapToUpdateSpecialty(form: FormValues): UpdateSpecialty {
+  return {
+    description: form.description,
+    name: form.name,
+  }
+}
 
 export function mapFromSpecialtyDto(specialtyDto: SpecialtyDto): Specialty {
   return {
@@ -15,7 +24,7 @@ export function mapFromSpecialtyDto(specialtyDto: SpecialtyDto): Specialty {
 }
 
 export function mapToCreateSpecialtyDto(
-  specialty: SpecialtyFormValues
+  specialty: CreateSpecialty
 ): CreateSpecialtyDto {
   return {
     description: specialty.description,
@@ -24,7 +33,7 @@ export function mapToCreateSpecialtyDto(
 }
 
 export function mapToUpdateSpecialtyDto(
-  specialty: SpecialtyFormValues
+  specialty: UpdateSpecialty
 ): UpdateSpecialtyDto {
   return {
     description: specialty.description,

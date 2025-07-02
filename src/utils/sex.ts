@@ -17,6 +17,6 @@ export function getSexOptions(): SexOption[] {
   })
 }
 
-export function isSex(option: unknown): option is Sex {
+export function isSex(option: string): option is Sex {
   return SEX_VALUES.includes(option as Sex)
 }

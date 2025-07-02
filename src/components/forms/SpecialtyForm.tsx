@@ -1,22 +1,27 @@
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik'
-import type { SpecialtyFormValues } from '../../types/specialty'
 import { useMemo } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
 import * as Yup from 'yup'
 
 type FormMode = 'add' | 'edit'
 
+export interface FormValues {
+  id?: string
+  name: string
+  description: string
+}
+
 export interface FormData {
-  initialValues?: SpecialtyFormValues
+  initialValues?: FormValues
   mode?: FormMode
 }
 
 interface Props extends FormData {
-  onSubmit?: (specialty: SpecialtyFormValues) => void | Promise<void>
+  onSubmit?: (specialty: FormValues) => void | Promise<void>
   onError?: () => void
 }
 
-const defaultValues: SpecialtyFormValues = {
+const defaultValues: FormValues = {
   description: '',
   name: '',
 }
@@ -49,8 +54,8 @@ export function SpecialtyForm({
   }, [mode])
 
   const handleSubmit = async (
-    values: SpecialtyFormValues,
-    { setSubmitting, resetForm }: FormikHelpers<SpecialtyFormValues>
+    values: FormValues,
+    { setSubmitting, resetForm }: FormikHelpers<FormValues>
   ) => {
     try {
       await onSubmit?.(values)

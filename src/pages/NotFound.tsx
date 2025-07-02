@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { getAuthUser } from '../utils/auth'
+import { getAuthUser } from '../services/auth'
 import { ROLE_HOME_PATHS } from '../constants/routes'
 
 export function NotFound() {

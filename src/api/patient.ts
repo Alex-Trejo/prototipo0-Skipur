@@ -1,12 +1,8 @@
-import type { PatientRegistrationFormValues } from '../types/patient'
-import { mapToPatientRegistrationDto } from '../utils/patient'
+import type { RegistratePatientDto } from '../types/patient'
 import api from './api'
 
-export async function createPatient(register: PatientRegistrationFormValues) {
-  try {
-    const patientRegistrationDto = mapToPatientRegistrationDto(register)
-    await api.post('/auth/register', patientRegistrationDto)
-  } catch {
-    throw new Error('El usuario no pudo ser registrado')
-  }
+export async function registerPatientRequest(
+  dto: RegistratePatientDto
+): Promise<void> {
+  await api.post('/auth/register', dto)
 }

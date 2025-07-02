@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import type { SpecialtyFormValues } from '../../types/specialty'
-import { SpecialtyForm, type FormData } from '../forms/SpecialtyForm'
+import {
+  SpecialtyForm,
+  type FormData,
+  type FormValues,
+} from '../forms/SpecialtyForm'
 import { HiOutlineX } from 'react-icons/hi'
 
 export interface ModalData extends FormData {
@@ -8,7 +11,7 @@ export interface ModalData extends FormData {
 }
 
 interface Props extends ModalData {
-  onSubmit?: (specialty: SpecialtyFormValues) => void | Promise<void>
+  onSubmit?: (specialty: FormValues) => void | Promise<void>
   onError?: () => void
   onClose?: () => void
 }
@@ -23,7 +26,7 @@ export function SpecialtyModal({
 }: Props) {
   const [isSubmitting, setSubmitting] = useState(false)
 
-  const handleSubmit = async (specialty: SpecialtyFormValues) => {
+  const handleSubmit = async (specialty: FormValues) => {
     setSubmitting(true)
     await onSubmit?.(specialty)
     setSubmitting(false)

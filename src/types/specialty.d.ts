@@ -4,10 +4,14 @@ export interface Specialty {
   description: string
 }
 
-export interface SpecialtyFormValues {
-  id?: string
+export interface CreateSpecialty {
   name: string
   description: string
+}
+
+export interface UpdateSpecialty {
+  name?: string
+  description?: string
 }
 
 export interface SpecialtyDto {

@@ -1,23 +1,23 @@
-import { jwtDecode } from 'jwt-decode'
-import { ACCESS_TOKEN_KEY } from '../constants/storage'
-import type { AccessTokenPayload, AuthUser } from '../types/auth'
+import type { FormValues } from '../components/forms/LoginForm'
+import type { AccessTokenPayload, AuthUser, Login } from '../types/auth'
 import { isUserRole } from './user'
-import { removeToken } from './storage'
 
-export function getAuthUser(): AuthUser | null {
-  const token = localStorage.getItem(ACCESS_TOKEN_KEY)
-  if (!token) return null
-  const authUser = jwtDecode(token) as AccessTokenPayload
-
-  if (!isUserRole(authUser.role)) throw new Error('Rol de usuario incorrecto')
+export function mapFromAccessTokenPayload(
+  tokenPayload: AccessTokenPayload
+): AuthUser {
+  if (!isUserRole(tokenPayload.role))
+    throw new Error('Rol de usuario incorrecto')
 
   return {
-    email: authUser.email,
-    id: authUser.id,
-    role: authUser.role,
+    email: tokenPayload.email,
+    id: tokenPayload.id,
+    role: tokenPayload.role,
   }
 }
 
-export function logout() {
-  removeToken()
+export function mapToLogin(form: FormValues): Login {
+  return {
+    email: form.email,
+    password: form.password,
+  }
 }

@@ -6,10 +6,7 @@ import {
 } from '../components/modals/SpecialtyModal'
 import { useEffect, useState } from 'react'
 import type { Specialty } from '../types/specialty'
-import {
-  MessageModal,
-  type MessageModalData,
-} from '../components/modals/MessageModal'
+import { MessageModal } from '../components/modals/MessageModal'
 import { useSpecialties } from '../hooks/useSpecialties'
 import {
   createSpecialty,
@@ -18,6 +15,7 @@ import {
 } from '../services/specialty'
 import type { FormValues } from '../components/forms/SpecialtyForm'
 import { mapToUpdateSpecialty } from '../utils/specialty'
+import { useMessageModal } from '../hooks/useMessageModal'
 
 export function Specialties() {
   const { specialties: initialSpecialties } = useSpecialties()
@@ -28,11 +26,8 @@ export function Specialties() {
     mode: 'add',
     open: false,
   })
-  const [messageModal, setMessageModal] = useState<MessageModalData>({
-    message: '',
+  const { modal, openModal, closeModal } = useMessageModal({
     title: 'Especialidad',
-    open: false,
-    type: 'info',
   })
 
   const openSpecialtyModal = (
@@ -53,73 +48,49 @@ export function Specialties() {
     }))
   }
 
-  const handleSearch = (search: string) => {
-    setSpecialties((specialties) =>
-      specialties.filter((s) =>
-        s.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-      )
-    )
-  }
-
   useEffect(() => {
     setSpecialties(initialSpecialties)
   }, [initialSpecialties])
 
-  const addSpecialty = async (specialty: FormValues) => {
-    try {
-      const newSpecialty = await createSpecialty(specialty)
-      setSpecialties((specialties) => {
-        const newSpecialties = [...specialties]
-        newSpecialties.push(newSpecialty)
-        return newSpecialties
-      })
-      closeSpecialtyModal()
-      setMessageModal((m) => ({
-        ...m,
-        message: 'La especialidad fue agregada exitosamente',
-        open: true,
-        type: 'info',
-      }))
-    } catch {
-      setMessageModal((m) => ({
-        ...m,
-        message: 'La especialidad no pudo ser creada, intentelo nuevamente',
-        open: true,
-        type: 'error',
-      }))
+  const addSpecialty = async (form: FormValues) => {
+    const newSpecialty = await createSpecialty(form)
+
+    setSpecialties((specialties) => {
+      const newSpecialties = [...specialties]
+      newSpecialties.push(newSpecialty)
+      return newSpecialties
+    })
+    closeSpecialtyModal()
+  }
+
+  const handleSubmit = (form: FormValues, mode: ModalData['mode']) => {
+    switch (mode) {
+      case 'add':
+        addSpecialty(form)
+        break
+
+      case 'edit':
+        modifySpecialty(form)
+        break
     }
   }
 
   const modifySpecialty = async (form: FormValues) => {
-    try {
-      const id = form.id
-      const specialty = mapToUpdateSpecialty(form)
+    const id = form.id
+    const specialty = mapToUpdateSpecialty(form)
 
-      if (!id)
-        throw new Error(
-          'No se ha proporcionado un ID de especialidad para actualizar'
-        )
-
-      const updatedSpecialty = await updateSpecialty(id, specialty)
-
-      setSpecialties((specialties) =>
-        specialties.map((s) => (s.id === id ? updatedSpecialty : s))
+    if (!id)
+      throw new Error(
+        'No se ha proporcionado un ID de especialidad para actualizar'
       )
-      closeSpecialtyModal()
-      setMessageModal((m) => ({
-        ...m,
-        message: 'La especialidad se actualizo correctamente',
-        open: true,
-        type: 'info',
-      }))
-    } catch {
-      setMessageModal((m) => ({
-        ...m,
-        message: 'La especialidad no se pudo modificar, intentelo nuevamente',
-        open: true,
-        type: 'error',
-      }))
-    }
+
+    const updatedSpecialty = await updateSpecialty(id, specialty)
+
+    setSpecialties((specialties) =>
+      specialties.map((s) => (s.id === id ? updatedSpecialty : s))
+    )
+
+    closeSpecialtyModal()
   }
 
   const removeSpecialty = async (id: string) => {
@@ -127,24 +98,29 @@ export function Specialties() {
       await deleteSpecialty(id)
       setSpecialties((specialties) => specialties.filter((s) => s.id !== id))
     } catch {
-      setMessageModal((m) => ({
-        ...m,
+      openModal({
         message: 'La especialidad no pudo ser elminada',
-        open: true,
         type: 'error',
-      }))
+      })
     }
   }
 
-  const closeMessageModal = () => {
-    setMessageModal((modal) => ({ ...modal, open: false }))
+  const handleError = async (mode: ModalData['mode']) => {
+    const addErrorMessage =
+      'La especialidad no pudo ser creada, intentelo nuevamente'
+    const editErrorMessage =
+      'La especialidad no se pudo modificar, intentelo nuevamente'
+    openModal({
+      message: mode === 'add' ? addErrorMessage : editErrorMessage,
+      type: 'error',
+    })
   }
 
   return (
     <main className="p-8">
       <h1 className="text-4xl font-semibold">Gestionar Especialidades</h1>
       <div className="flex justify-between items-center py-8">
-        <SearchForm onSubmit={handleSearch} />
+        <SearchForm />
         <button
           className="bg-blue-500 text-white p-2 rounded-md  h-fit"
           type="button"
@@ -163,16 +139,15 @@ export function Specialties() {
         initialValues={specialtyModal.initialValues}
         mode={specialtyModal.mode}
         onClose={closeSpecialtyModal}
-        onSubmit={
-          specialtyModal.mode === 'add' ? addSpecialty : modifySpecialty
-        }
+        onSubmit={handleSubmit}
+        onError={handleError}
       />
       <MessageModal
-        message={messageModal.message}
-        title={messageModal.title}
-        open={messageModal.open}
-        type={messageModal.type}
-        onAccept={closeMessageModal}
+        message={modal.message}
+        title={modal.title}
+        open={modal.open}
+        type={modal.type}
+        onAccept={closeModal}
       />
     </main>
   )

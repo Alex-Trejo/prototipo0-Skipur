@@ -11,8 +11,11 @@ export interface ModalData extends FormData {
 }
 
 interface Props extends ModalData {
-  onSubmit?: (specialty: FormValues) => void | Promise<void>
-  onError?: () => void
+  onSubmit?: (
+    specialty: FormValues,
+    mode: ModalData['mode']
+  ) => void | Promise<void>
+  onError?: (mode: ModalData['mode']) => void
   onClose?: () => void
 }
 
@@ -28,13 +31,13 @@ export function SpecialtyModal({
 
   const handleSubmit = async (specialty: FormValues) => {
     setSubmitting(true)
-    await onSubmit?.(specialty)
+    await onSubmit?.(specialty, mode)
     setSubmitting(false)
   }
 
   const handleError = () => {
     setSubmitting(false)
-    onError?.()
+    onError?.(mode)
   }
 
   if (!open) return null

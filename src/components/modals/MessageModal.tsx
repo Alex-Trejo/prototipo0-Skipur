@@ -1,7 +1,9 @@
 import type { ReactElement } from 'react'
 import { MdOutlineError, MdOutlineInfo, MdOutlineWarning } from 'react-icons/md'
-
-type MessageModalType = 'info' | 'error' | 'warn'
+import type {
+  MessageModalState,
+  MessageModalType,
+} from '../../reducers/messageModalReducer'
 
 function MessageModalIcon({ type }: { type: MessageModalType }) {
   const baseClass = 'min-w-[28px] min-h-[28px]'
@@ -13,14 +15,7 @@ function MessageModalIcon({ type }: { type: MessageModalType }) {
   return icons[type] ?? icons.info
 }
 
-export interface MessageModalData {
-  title: string
-  message: string
-  type?: MessageModalType
-  open?: boolean
-}
-
-interface Props extends MessageModalData {
+interface Props extends MessageModalState {
   onAccept?: () => void
 }
 

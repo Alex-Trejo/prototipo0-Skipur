@@ -1,9 +1,7 @@
 import type { ReactElement } from 'react'
 import { MdOutlineError, MdOutlineInfo, MdOutlineWarning } from 'react-icons/md'
-import type {
-  MessageModalState,
-  MessageModalType,
-} from '../../reducers/messageModalReducer'
+import { Modal } from './Modal'
+import type { MessageModalType } from '../../hooks/useMessageModal'
 
 function MessageModalIcon({ type }: { type: MessageModalType }) {
   const baseClass = 'min-w-[28px] min-h-[28px]'
@@ -15,21 +13,24 @@ function MessageModalIcon({ type }: { type: MessageModalType }) {
   return icons[type] ?? icons.info
 }
 
-interface Props extends MessageModalState {
+interface Props {
+  title: string
+  message: string
+  type?: MessageModalType
+  open?: boolean
   onAccept?: () => void
+  onClose?: () => void
 }
 
 export function MessageModal({
-  message,
   title,
+  message,
   type = 'info',
   open = false,
   onAccept,
 }: Props) {
-  if (!open) return null
-
   return (
-    <dialog className="fixed w-dvw h-dvh inset-0 z-50 backdrop-blur-xs flex items-center justify-center bg-black/30 p-20">
+    <Modal open={open} onClose={onAccept}>
       <aside className="bg-white p-6 rounded-md border border-gray-300 flex flex-col gap-y-4 w-fit max-w-[360px]">
         <h6 className="font-semibold text-2xl">{title}</h6>
         <div className="flex justify-between items-center gap-x-6">
@@ -46,6 +47,6 @@ export function MessageModal({
           </button>
         </div>
       </aside>
-    </dialog>
+    </Modal>
   )
 }

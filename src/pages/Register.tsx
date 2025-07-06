@@ -31,15 +31,23 @@ export function Register() {
 
   const navigateToLogin = () => navigate('/', { replace: true })
 
+  const handleAccept = () => {
+    if (modal.type === 'info') {
+      navigateToLogin()
+    } else {
+      closeModal()
+    }
+  }
+
   return (
     <main className="bg-slate-300 min-h-dvh flex justify-center items-center p-10">
       <RegisterForm onSubmit={handleSubmit} onError={handleError} />
       <MessageModal
-        type={modal.type}
-        title={modal.title}
-        message={modal.message}
         open={modal.open}
-        onAccept={modal.type === 'info' ? navigateToLogin : closeModal}
+        message={modal.message}
+        title={modal.title}
+        type={modal.type}
+        onAccept={handleAccept}
       />
     </main>
   )

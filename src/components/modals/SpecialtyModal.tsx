@@ -5,6 +5,7 @@ import {
   type FormValues,
 } from '../forms/SpecialtyForm'
 import { HiOutlineX } from 'react-icons/hi'
+import { Modal } from './Modal'
 
 export interface ModalData extends FormData {
   open?: boolean
@@ -40,10 +41,8 @@ export function SpecialtyModal({
     onError?.(mode)
   }
 
-  if (!open) return null
-
   return (
-    <dialog className="fixed w-dvw h-dvh inset-0 z-50 backdrop-blur-xs flex items-center justify-center bg-black/30 p-20">
+    <Modal open={open} onClose={onClose}>
       <aside className="bg-white p-6 rounded-md border border-gray-300 flex flex-col gap-y-4 min-w-[50%] relative">
         <button
           className="absolute right-0 top-0 m-2"
@@ -60,6 +59,6 @@ export function SpecialtyModal({
           initialValues={initialValues}
         />
       </aside>
-    </dialog>
+    </Modal>
   )
 }

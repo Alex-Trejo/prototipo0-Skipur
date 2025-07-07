@@ -1,14 +1,14 @@
 import { Navigate, Outlet } from 'react-router'
 import type { UserRole } from '../../types/user'
-import { getAuthUser } from '../../services/auth'
 import { ROLE_HOME_PATHS } from '../../constants/routes'
+import { useAuth } from '../../hooks/useAuth'
 
 interface Props {
   allowedRoles: UserRole[]
 }
 
 export function ProtectedRoute({ allowedRoles }: Props) {
-  const authUser = getAuthUser()
+  const { authUser } = useAuth()
 
   if (!authUser) {
     return <Navigate to={'/'} replace />

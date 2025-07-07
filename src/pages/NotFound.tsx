@@ -1,9 +1,9 @@
 import { Link } from 'react-router'
-import { getAuthUser } from '../services/auth'
 import { ROLE_HOME_PATHS } from '../constants/routes'
+import { useAuth } from '../hooks/useAuth'
 
 export function NotFound() {
-  const authUser = getAuthUser()
+  const { authUser } = useAuth()
 
   const redirectTo = !authUser ? '/' : ROLE_HOME_PATHS[authUser.role]
 

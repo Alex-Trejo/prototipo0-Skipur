@@ -1,16 +1,13 @@
-import { useNavigate } from 'react-router'
 import { LoginForm, type FormValues } from '../components/forms/LoginForm'
-import { login } from '../services/auth'
-import { ROLE_HOME_PATHS } from '../constants/routes'
 import { mapToLogin } from '../utils/auth'
+import { useAuth } from '../hooks/useAuth'
 
 export function Login() {
-  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleSubmit = async (values: FormValues) => {
     const loginData = mapToLogin(values)
-    const user = await login(loginData)
-    navigate(ROLE_HOME_PATHS[user.role], { replace: true })
+    await login(loginData)
   }
 
   return (

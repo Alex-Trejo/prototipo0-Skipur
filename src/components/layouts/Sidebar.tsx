@@ -1,7 +1,7 @@
 import Logo from '../../assets/images/logo.png'
 import { MdLogout } from 'react-icons/md'
-import { NavLink, useNavigate } from 'react-router'
-import { logout } from '../../services/auth'
+import { NavLink } from 'react-router'
+import { useAuth } from '../../hooks/useAuth'
 
 export interface SidebarOption {
   icon: React.ReactNode
@@ -15,12 +15,7 @@ interface Props {
 }
 
 export function SidebarLayout({ options, children }: Props) {
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    logout()
-    navigate('/', { replace: true })
-  }
+  const { logout } = useAuth()
 
   return (
     <div className="min-h-dvh grid grid-cols-[minmax(auto,_280px)_1fr]">
@@ -60,7 +55,7 @@ export function SidebarLayout({ options, children }: Props) {
           <button
             className="rounded-md hover:bg-red-500  py-3 px-5 flex items-center gap-x-2"
             type="button"
-            onClick={handleLogout}
+            onClick={logout}
           >
             <MdLogout className="w-[16px] h-[16px]" />
             Cerrar Sesión

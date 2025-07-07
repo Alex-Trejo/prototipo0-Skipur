@@ -1,13 +1,9 @@
 import type { FormValues } from '../components/forms/LoginForm'
 import type { AccessTokenPayload, AuthUser, Login } from '../types/auth'
-import { isUserRole } from './user'
 
 export function mapFromAccessTokenPayload(
   tokenPayload: AccessTokenPayload
 ): AuthUser {
-  if (!isUserRole(tokenPayload.role))
-    throw new Error('Rol de usuario incorrecto')
-
   return {
     email: tokenPayload.email,
     id: tokenPayload.id,

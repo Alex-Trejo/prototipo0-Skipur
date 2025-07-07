@@ -18,7 +18,7 @@ export interface LoginResponseDto {
 export interface AccessTokenPayload {
   id: string
   email: string
-  role: string
+  role: UserRole
   iat: number
   exp: number
 }
@@ -27,4 +27,9 @@ export interface AuthUser {
   id: string
   email: string
   role: UserRole
+}
+
+export interface AuthContextType {
+  authUser: AuthUser | null
+  setAuthUser: (authUser: AuthUser | null) => void
 }

@@ -113,13 +113,13 @@ export function Specialties() {
       },
       buttons: [
         {
-          label: 'Cancelar',
-          onClick: closeAndResetModal,
-        },
-        {
           label: 'Eliminar',
           style: 'error',
           onClick: () => removeSpecialty(specialty.id),
+        },
+        {
+          label: 'Cancelar',
+          onClick: closeAndResetModal,
         },
       ],
     })

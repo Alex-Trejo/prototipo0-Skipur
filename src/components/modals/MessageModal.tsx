@@ -44,7 +44,7 @@ export function MessageModal({
           <p>{message}</p>
         </div>
 
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-x-10">
           {modalButtons.map(({ label, style, onClick }, index) => (
             <ModalButton
               key={`${label}-${index}`}

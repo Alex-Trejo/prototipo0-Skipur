@@ -7,16 +7,16 @@ import {
 import { HiOutlineX } from 'react-icons/hi'
 import { Modal } from './Modal'
 
-export interface ModalData extends FormData {
+export interface SpecialtyModalData extends FormData {
   open?: boolean
 }
 
-interface Props extends ModalData {
+interface Props extends SpecialtyModalData {
   onSubmit?: (
     specialty: FormValues,
-    mode: ModalData['mode']
+    mode: SpecialtyModalData['mode']
   ) => void | Promise<void>
-  onError?: (mode: ModalData['mode']) => void
+  onError?: (mode: NonNullable<SpecialtyModalData['mode']>) => void
   onClose?: () => void
 }
 
@@ -41,8 +41,14 @@ export function SpecialtyModal({
     onError?.(mode)
   }
 
+  const handleClose = () => {
+    if (isSubmitting) return
+
+    onClose?.()
+  }
+
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleClose}>
       <aside className="bg-white p-6 rounded-md border border-gray-300 flex flex-col gap-y-4 min-w-[50%] relative">
         <button
           className="absolute right-0 top-0 m-2"

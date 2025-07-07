@@ -85,7 +85,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
               {isSubmitting && (
                 <ImSpinner8 className="animate-spin" color="white" />
               )}
-              {isSubmitting ? 'Verificando...' : 'Iniciar Sesión'}
+              {isSubmitting ? 'Verificando' : 'Iniciar Sesión'}
             </span>
           </button>
           <p className="text-center">

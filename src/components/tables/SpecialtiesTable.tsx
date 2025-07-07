@@ -1,13 +1,22 @@
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import type { Specialty } from '../../types/specialty'
+import { ImSpinner8 } from 'react-icons/im'
 
 interface Props {
   specialties?: Specialty[] | null
+  loading?: boolean
   onEdit?: (specialty: Specialty) => void | Promise<void>
-  onDelete?: (id: string) => void | Promise<void>
+  onDelete?: (specialty: Specialty) => void | Promise<void>
 }
 
-export function SpecialtiesTable({ specialties, onEdit, onDelete }: Props) {
+const COLUMNS = 3
+
+export function SpecialtiesTable({
+  specialties,
+  loading = false,
+  onEdit,
+  onDelete,
+}: Props) {
   return (
     <table className="table">
       <thead>
@@ -18,7 +27,15 @@ export function SpecialtiesTable({ specialties, onEdit, onDelete }: Props) {
         </tr>
       </thead>
       <tbody>
-        {specialties?.length ? (
+        {loading ? (
+          <tr>
+            <td colSpan={COLUMNS}>
+              <span className="inline-flex items-center gap-x-2">
+                <ImSpinner8 className="animate-spin" /> Cargando
+              </span>
+            </td>
+          </tr>
+        ) : specialties?.length ? (
           specialties.map((specialty) => (
             <tr key={specialty.id}>
               <td>{specialty.name}</td>
@@ -35,7 +52,7 @@ export function SpecialtiesTable({ specialties, onEdit, onDelete }: Props) {
                   <button
                     className="p-2 bg-red-500 rounded-md"
                     type="button"
-                    onClick={() => onDelete?.(specialty.id!)}
+                    onClick={() => onDelete?.(specialty)}
                   >
                     <FaTrash className="text-white w-[12px] h-[12px]" />
                   </button>
@@ -45,7 +62,7 @@ export function SpecialtiesTable({ specialties, onEdit, onDelete }: Props) {
           ))
         ) : (
           <tr>
-            <td colSpan={3}>No hay especialidades registradas</td>
+            <td colSpan={COLUMNS}>No hay especialidades registradas</td>
           </tr>
         )}
       </tbody>

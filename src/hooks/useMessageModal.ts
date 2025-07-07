@@ -1,20 +1,23 @@
 import { useState } from 'react'
 import { useModal, type ModalState } from './useModal'
-
-export type MessageModalType = 'info' | 'error' | 'warn'
+import type { ModalIconType } from '../components/modals/ModalIcon'
+import type { ModalButtonProps } from '../components/modals/ModalButton'
 
 export interface MessageModalData {
   title: string
   message: string
-  type: MessageModalType
+  icon: ModalIconType
 }
 
-export type MessageModalState = ModalState & MessageModalData
+export type MessageModalState = ModalState &
+  MessageModalData & {
+    buttons?: ModalButtonProps[]
+  }
 
 export function useMessageModal(initialState?: Partial<MessageModalState>) {
   const {
     open,
-    openModal: show,
+    openModal: showModal,
     closeModal,
     toggleModal,
   } = useModal({
@@ -24,26 +27,44 @@ export function useMessageModal(initialState?: Partial<MessageModalState>) {
   const [data, setData] = useState<MessageModalData>({
     message: initialState?.message ?? '',
     title: initialState?.title ?? '',
-    type: initialState?.type ?? 'info',
+    icon: initialState?.icon ?? 'info',
   })
 
-  const updateData = (payload: Partial<MessageModalData>) => {
+  const [buttons, setButtons] = useState(initialState?.buttons)
+
+  const updateModal = (payload: Partial<MessageModalData>) => {
     setData((data) => ({ ...data, ...payload }))
   }
 
-  const openModal = (payload: Partial<MessageModalData>) => {
-    updateData({ ...payload })
-    show()
+  const openModal = ({
+    data,
+    buttons,
+  }: {
+    data?: Partial<MessageModalData>
+    buttons?: ModalButtonProps[]
+  }) => {
+    updateModal({ ...data })
+    setButtons(buttons)
+    showModal()
+  }
+
+  const closeAndResetModal = () => {
+    closeModal()
+    setButtons(undefined)
+  }
+
+  const modal = {
+    open,
+    ...data,
+    buttons,
   }
 
   return {
-    modal: {
-      open,
-      ...data,
-    },
-    updateData,
+    modal,
+    updateModal,
     openModal,
     closeModal,
     toggleModal,
+    closeAndResetModal,
   }
 }

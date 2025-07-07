@@ -1,37 +1,36 @@
 import { SpecialtiesTable } from '../components/tables/SpecialtiesTable'
 import { SearchForm } from '../components/forms/SearchForm'
 import {
-  type ModalData,
+  type SpecialtyModalData,
   SpecialtyModal,
 } from '../components/modals/SpecialtyModal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { Specialty } from '../types/specialty'
 import { MessageModal } from '../components/modals/MessageModal'
 import { useSpecialties } from '../hooks/useSpecialties'
-import {
-  createSpecialty,
-  deleteSpecialty,
-  updateSpecialty,
-} from '../services/specialty'
 import type { FormValues } from '../components/forms/SpecialtyForm'
-import { mapToUpdateSpecialty } from '../utils/specialty'
+import { mapToCreateSpecialty, mapToUpdateSpecialty } from '../utils/specialty'
 import { useMessageModal } from '../hooks/useMessageModal'
 
 export function Specialties() {
-  const { specialties: initialSpecialties } = useSpecialties()
-  const [specialties, setSpecialties] =
-    useState<Specialty[]>(initialSpecialties)
-  const [specialtyModal, setSpecialtyModal] = useState<ModalData>({
+  const {
+    specialties,
+    loading,
+    addSpecialty,
+    updateSpecialty,
+    deleteSpecialty,
+  } = useSpecialties()
+  const [specialtyModal, setSpecialtyModal] = useState<SpecialtyModalData>({
     initialValues: undefined,
     mode: 'add',
     open: false,
   })
-  const { modal, openModal, closeModal } = useMessageModal({
+  const { modal, openModal, closeModal, closeAndResetModal } = useMessageModal({
     title: 'Especialidad',
   })
 
   const openSpecialtyModal = (
-    mode: ModalData['mode'],
+    mode: SpecialtyModalData['mode'],
     specialty?: Specialty
   ) => {
     setSpecialtyModal({
@@ -48,25 +47,39 @@ export function Specialties() {
     }))
   }
 
-  useEffect(() => {
-    setSpecialties(initialSpecialties)
-  }, [initialSpecialties])
-
-  const addSpecialty = async (form: FormValues) => {
-    const newSpecialty = await createSpecialty(form)
-
-    setSpecialties((specialties) => {
-      const newSpecialties = [...specialties]
-      newSpecialties.push(newSpecialty)
-      return newSpecialties
-    })
+  const createSpecialty = async (form: FormValues) => {
+    const specialty = mapToCreateSpecialty(form)
+    await addSpecialty(specialty)
     closeSpecialtyModal()
   }
 
-  const handleSubmit = (form: FormValues, mode: ModalData['mode']) => {
+  const modifySpecialty = async (form: FormValues) => {
+    const id = form.id
+
+    if (!id)
+      throw new Error(
+        'No se ha proporcionado un ID de especialidad para actualizar'
+      )
+
+    const specialty = mapToUpdateSpecialty(form)
+    await updateSpecialty(id, specialty)
+
+    closeSpecialtyModal()
+  }
+
+  const removeSpecialty = async (id: string) => {
+    try {
+      await deleteSpecialty(id)
+      closeModal()
+    } catch {
+      showError('delete')
+    }
+  }
+
+  const handleSubmit = (form: FormValues, mode: SpecialtyModalData['mode']) => {
     switch (mode) {
       case 'add':
-        addSpecialty(form)
+        createSpecialty(form)
         break
 
       case 'edit':
@@ -75,44 +88,40 @@ export function Specialties() {
     }
   }
 
-  const modifySpecialty = async (form: FormValues) => {
-    const id = form.id
-    const specialty = mapToUpdateSpecialty(form)
-
-    if (!id)
-      throw new Error(
-        'No se ha proporcionado un ID de especialidad para actualizar'
-      )
-
-    const updatedSpecialty = await updateSpecialty(id, specialty)
-
-    setSpecialties((specialties) =>
-      specialties.map((s) => (s.id === id ? updatedSpecialty : s))
-    )
-
-    closeSpecialtyModal()
-  }
-
-  const removeSpecialty = async (id: string) => {
-    try {
-      await deleteSpecialty(id)
-      setSpecialties((specialties) => specialties.filter((s) => s.id !== id))
-    } catch {
-      openModal({
-        message: 'La especialidad no pudo ser elminada',
-        type: 'error',
-      })
+  const showError = async (
+    mode: NonNullable<SpecialtyModalData['mode']> | 'delete'
+  ) => {
+    const messages: Record<typeof mode, string> = {
+      add: 'La especialidad no pudo ser creada, intentelo más tarde',
+      edit: 'La especialidad no se pudo modificar, intentelo más tarde',
+      delete: 'La especialidad no pudo ser eliminada, intentelo más tarde',
     }
+
+    openModal({
+      data: {
+        message: messages[mode],
+        icon: 'error',
+      },
+    })
   }
 
-  const handleError = async (mode: ModalData['mode']) => {
-    const addErrorMessage =
-      'La especialidad no pudo ser creada, intentelo nuevamente'
-    const editErrorMessage =
-      'La especialidad no se pudo modificar, intentelo nuevamente'
+  const handleDelete = async (specialty: Specialty) => {
     openModal({
-      message: mode === 'add' ? addErrorMessage : editErrorMessage,
-      type: 'error',
+      data: {
+        message: `¿Estas seguro que deseas eliminar la especialidad de "${specialty.name}"?`,
+        icon: 'danger',
+      },
+      buttons: [
+        {
+          label: 'Cancelar',
+          onClick: closeAndResetModal,
+        },
+        {
+          label: 'Eliminar',
+          style: 'error',
+          onClick: () => removeSpecialty(specialty.id),
+        },
+      ],
     })
   }
 
@@ -131,8 +140,9 @@ export function Specialties() {
       </div>
       <SpecialtiesTable
         specialties={specialties}
+        loading={loading}
         onEdit={(specialty) => openSpecialtyModal('edit', specialty)}
-        onDelete={(id) => removeSpecialty(id)}
+        onDelete={handleDelete}
       />
       <SpecialtyModal
         open={specialtyModal.open}
@@ -140,14 +150,15 @@ export function Specialties() {
         mode={specialtyModal.mode}
         onClose={closeSpecialtyModal}
         onSubmit={handleSubmit}
-        onError={handleError}
+        onError={showError}
       />
       <MessageModal
         message={modal.message}
         title={modal.title}
         open={modal.open}
-        type={modal.type}
-        onAccept={closeModal}
+        icon={modal.icon}
+        buttons={modal.buttons}
+        onClose={closeAndResetModal}
       />
     </main>
   )

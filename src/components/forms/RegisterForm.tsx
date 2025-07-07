@@ -237,7 +237,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
               {isSubmitting && (
                 <ImSpinner8 className="animate-spin" color="white" />
               )}
-              {isSubmitting ? 'Registrando cuenta...' : 'Registrarse'}
+              {isSubmitting ? 'Registrando cuenta' : 'Registrarse'}
             </span>
           </button>
           <p className="text-center">

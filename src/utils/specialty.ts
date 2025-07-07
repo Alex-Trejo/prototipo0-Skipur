@@ -8,6 +8,13 @@ import type {
   UpdateSpecialty,
 } from '../types/specialty'
 
+export function mapToCreateSpecialty(form: FormValues): CreateSpecialty {
+  return {
+    description: form.description,
+    name: form.name,
+  }
+}
+
 export function mapToUpdateSpecialty(form: FormValues): UpdateSpecialty {
   return {
     description: form.description,

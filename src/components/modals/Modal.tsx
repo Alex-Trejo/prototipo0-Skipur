@@ -3,10 +3,16 @@ import { useEffect, useRef } from 'react'
 interface Props {
   children: React.ReactNode
   open?: boolean
+  disabledClose?: boolean
   onClose?: () => void
 }
 
-export function Modal({ children, open = false, onClose }: Props) {
+export function Modal({
+  children,
+  open = false,
+  disabledClose = false,
+  onClose,
+}: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -16,7 +22,7 @@ export function Modal({ children, open = false, onClose }: Props) {
   }, [open])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || disabledClose) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -29,7 +35,7 @@ export function Modal({ children, open = false, onClose }: Props) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [open, onClose])
+  }, [open, disabledClose, onClose])
 
   if (!open) return null
 

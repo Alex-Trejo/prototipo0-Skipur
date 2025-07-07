@@ -4,38 +4,46 @@ import { useNavigate } from 'react-router'
 import { mapToRegistratePatient } from '../utils/patient'
 import { registerPatient } from '../services/patient'
 import { useMessageModal } from '../hooks/useMessageModal'
+import { useState } from 'react'
 
 export function Register() {
   const navigate = useNavigate()
   const { modal, openModal, closeModal } = useMessageModal({
     title: 'Registrar Paciente',
   })
+  const [error, setIsError] = useState(false)
 
   const handleSubmit = async (values: FormValues) => {
     const registration = mapToRegistratePatient(values)
 
     await registerPatient(registration)
 
+    setIsError(false)
     openModal({
-      type: 'info',
-      message: 'El paciente se registro correctamente',
+      data: {
+        icon: 'info',
+        message: 'El paciente se registro correctamente',
+      },
     })
   }
 
   const handleError = () => {
     openModal({
-      type: 'error',
-      message: 'No se pudo registrar el paciente, intentelo nuevamente',
+      data: {
+        icon: 'error',
+        message: 'No se pudo registrar el paciente, intentelo nuevamente',
+      },
     })
+    setIsError(true)
   }
 
   const navigateToLogin = () => navigate('/', { replace: true })
 
-  const handleAccept = () => {
-    if (modal.type === 'info') {
-      navigateToLogin()
-    } else {
+  const handleClose = () => {
+    if (error) {
       closeModal()
+    } else {
+      navigateToLogin()
     }
   }
 
@@ -46,8 +54,8 @@ export function Register() {
         open={modal.open}
         message={modal.message}
         title={modal.title}
-        type={modal.type}
-        onAccept={handleAccept}
+        icon={modal.icon}
+        onClose={handleClose}
       />
     </main>
   )

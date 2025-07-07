@@ -1,12 +1,15 @@
 import { Route, Routes } from 'react-router'
 import './App.css'
-import { Login } from './pages/Login'
-import { Register } from './pages/Register'
 import { AdminLayout } from './components/layouts/Admin'
-import { AdminHome } from './pages/Admin'
-import { Specialties } from './pages/Specialties'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
-import { NotFound } from './pages/NotFound'
+import {
+  AdminHome,
+  Login,
+  NotFound,
+  Register,
+  Specialists,
+  Specialties,
+} from './pages'
 
 function App() {
   return (
@@ -18,6 +21,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminHome />} />
           <Route path="specialties" element={<Specialties />} />
+          <Route path="specialists" element={<Specialists />} />
         </Route>
       </Route>
 

@@ -3,7 +3,7 @@ import { MdLogout } from 'react-icons/md'
 import { NavLink, useNavigate } from 'react-router'
 import { logout } from '../../services/auth'
 
-interface SidebarOption {
+export interface SidebarOption {
   icon: React.ReactNode
   label: string
   path: string

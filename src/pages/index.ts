@@ -1,0 +1,6 @@
+export { AdminHome } from './Admin'
+export { Login } from './Login'
+export { NotFound } from './NotFound'
+export { Register } from './Register'
+export { Specialists } from './Specialists'
+export { Specialties } from './Specialties'

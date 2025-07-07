@@ -118,7 +118,7 @@ export function SpecialtyForm({
               {isSubmitting && (
                 <ImSpinner8 className="animate-spin" color="white" />
               )}
-              {isSubmitting ? 'Guardando...' : 'Guardar'}
+              {isSubmitting ? 'Guardando' : 'Guardar'}
             </span>
           </button>
         </Form>

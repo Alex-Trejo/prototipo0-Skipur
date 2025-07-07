@@ -27,6 +27,7 @@ export function mapFromSpecialtyDto(specialtyDto: SpecialtyDto): Specialty {
     description: specialtyDto.description,
     name: specialtyDto.name,
     id: specialtyDto.id,
+    isActive: specialtyDto.is_active,
   }
 }
 

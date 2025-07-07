@@ -1,6 +1,7 @@
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa'
 import type { Specialty } from '../../types/specialty'
 import { ImSpinner8 } from 'react-icons/im'
+import { FaXmark } from 'react-icons/fa6'
 
 interface Props {
   specialties?: Specialty[] | null
@@ -9,7 +10,7 @@ interface Props {
   onDelete?: (specialty: Specialty) => void | Promise<void>
 }
 
-const COLUMNS = 3
+const COLUMNS = 4
 
 export function SpecialtiesTable({
   specialties,
@@ -23,6 +24,7 @@ export function SpecialtiesTable({
         <tr>
           <th>Nombre de la especialidad</th>
           <th>Descripción</th>
+          <th>Activo</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -40,6 +42,13 @@ export function SpecialtiesTable({
             <tr key={specialty.id}>
               <td>{specialty.name}</td>
               <td>{specialty.description}</td>
+              <td>
+                {specialty.isActive ? (
+                  <FaCheck className="text-green-500" />
+                ) : (
+                  <FaXmark className="text-red-500" />
+                )}
+              </td>
               <td>
                 <div className="flex gap-x-3 items-center">
                   <button

@@ -36,8 +36,8 @@ export function useSpecialties() {
     const specialtyUpdated = await updateSpecialty(id, specialty)
 
     setSpecialties((specialties) => {
-      const updatedSpecialties = specialties.map((s) =>
-        s.id === specialtyUpdated.id ? specialtyUpdated : s
+      const updatedSpecialties = specialties.map((specialty) =>
+        specialty.id === specialtyUpdated.id ? specialtyUpdated : specialty
       )
       return updatedSpecialties
     })
@@ -46,7 +46,16 @@ export function useSpecialties() {
   const remove = async (id: string) => {
     await deleteSpecialty(id)
 
-    setSpecialties((specialties) => specialties.filter((s) => s.id !== id))
+    setSpecialties((specialties) =>
+      specialties.map((specialty) =>
+        specialty.id === id
+          ? {
+              ...specialty,
+              isActive: false,
+            }
+          : specialty
+      )
+    )
   }
 
   return {

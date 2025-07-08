@@ -110,13 +110,14 @@ export function RegisterForm({ onSubmit, onError }: Props) {
           </p>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="representativeName">
-              Nombre del representante{' '}
+              Nombre del representante
               <span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
               id="representativeName"
               name="representativeName"
+              placeholder="John Doe"
             />
             <ErrorMessage
               className="text-red-500 text-sm"
@@ -126,13 +127,14 @@ export function RegisterForm({ onSubmit, onError }: Props) {
           </div>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="representativeEmail">
-              Correo electrónico <span className="text-red-500 text-sm">*</span>
+              Correo electrónico<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
               id="representativeEmail"
               name="representativeEmail"
               type="email"
+              placeholder="johndoe@email.com"
             />
             <ErrorMessage
               className="text-red-500 text-sm"
@@ -142,12 +144,14 @@ export function RegisterForm({ onSubmit, onError }: Props) {
           </div>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="representativePhone">
-              Teléfono <span className="text-red-500 text-sm">*</span>
+              Teléfono<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
               id="representativePhone"
               name="representativePhone"
+              type="tel"
+              placeholder="0936592719"
             />
             <ErrorMessage
               className="text-red-500 text-sm"
@@ -157,13 +161,13 @@ export function RegisterForm({ onSubmit, onError }: Props) {
           </div>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="patientName">
-              Nombre del paciente{' '}
-              <span className="text-red-500 text-sm">*</span>
+              Nombre del paciente<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
               id="patientName"
               name="patientName"
+              placeholder="Jane Doe"
             />
             <ErrorMessage
               className="text-red-500 text-sm"
@@ -173,7 +177,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
           </div>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="patientAge">
-              Edad del paciente <span className="text-red-500 text-sm">*</span>
+              Edad del paciente<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
@@ -183,6 +187,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
               min={MIN_AGE}
               step="1"
               max={MAX_AGE}
+              placeholder="25"
             />
             <ErrorMessage
               className="text-red-500 text-sm"
@@ -192,7 +197,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
           </div>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="patientSex">
-              Sexo del paciente <span className="text-red-500 text-sm">*</span>
+              Sexo del paciente<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
@@ -221,6 +226,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
               className="border-gray-300 border rounded-md p-2"
               id="medicalCondition"
               name="medicalCondition"
+              placeholder="Sindrome de down"
             />
             <ErrorMessage
               className="text-red-500 text-sm"

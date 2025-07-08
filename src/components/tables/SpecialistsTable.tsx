@@ -1,29 +1,36 @@
-import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa'
-import type { Specialty } from '../../types/specialty'
 import { ImSpinner8 } from 'react-icons/im'
+import type { Specialist } from '../../types/specialist'
+import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa'
+import { useSpecialtyCache } from '../../hooks/useSpecialtyCache'
 import { FaXmark } from 'react-icons/fa6'
 
+const COLUMNS = 6
+
 interface Props {
-  specialties?: Specialty[] | null
+  specialists?: Specialist[] | null
   loading?: boolean
-  onEdit?: (specialty: Specialty) => void | Promise<void>
-  onDelete?: (specialty: Specialty) => void | Promise<void>
+  onEdit?: (specialist: Specialist) => void | Promise<void>
+  onDelete?: (specialist: Specialist) => void | Promise<void>
 }
 
-const COLUMNS = 4
-
-export function SpecialtiesTable({
-  specialties,
-  loading = false,
+export function SpecialistsTable({
+  specialists,
+  loading,
   onEdit,
   onDelete,
 }: Props) {
+  const { getSpecialty } = useSpecialtyCache([
+    ...new Set(specialists?.map((s) => s.specialtyId)),
+  ])
+
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>Nombre de la especialidad</th>
-          <th>Descripción</th>
+          <th>Nombre completo</th>
+          <th>Email</th>
+          <th>Titulo</th>
+          <th>Especialidad</th>
           <th>Activo</th>
           <th>Acciones</th>
         </tr>
@@ -37,13 +44,19 @@ export function SpecialtiesTable({
               </span>
             </td>
           </tr>
-        ) : specialties?.length ? (
-          specialties.map((specialty) => (
-            <tr key={specialty.id}>
-              <td>{specialty.name}</td>
-              <td>{specialty.description}</td>
+        ) : specialists?.length ? (
+          specialists.map((specialist) => (
+            <tr key={specialist.id}>
+              <td>{specialist.fullName}</td>
+              <td>{specialist.email}</td>
+              <td>{specialist.title}</td>
               <td>
-                {specialty.isActive ? (
+                {getSpecialty(specialist.specialtyId)?.name ?? (
+                  <ImSpinner8 className="animate-spin" />
+                )}
+              </td>
+              <td>
+                {specialist.isActive ? (
                   <FaCheck className="text-green-500" />
                 ) : (
                   <FaXmark className="text-red-500" />
@@ -54,15 +67,15 @@ export function SpecialtiesTable({
                   <button
                     className="p-2 bg-yellow-500 rounded-md"
                     type="button"
-                    onClick={() => onEdit?.(specialty)}
+                    onClick={() => onEdit?.(specialist)}
                   >
                     <FaEdit className="text-white w-[12px] h-[12px]" />
                   </button>
                   <button
                     className="p-2 bg-red-500 rounded-md"
                     type="button"
-                    onClick={() => onDelete?.(specialty)}
-                    disabled={!specialty.isActive}
+                    onClick={() => onDelete?.(specialist)}
+                    disabled={!specialist.isActive}
                   >
                     <FaTrash className="text-white w-[12px] h-[12px]" />
                   </button>
@@ -72,7 +85,7 @@ export function SpecialtiesTable({
           ))
         ) : (
           <tr>
-            <td colSpan={COLUMNS}>No hay especialidades registradas</td>
+            <td colSpan={COLUMNS}>No hay especialistas registrados</td>
           </tr>
         )}
       </tbody>

@@ -50,7 +50,12 @@ export function useMessageModal(initialState?: Partial<MessageModalState>) {
 
   const closeAndResetModal = () => {
     closeModal()
-    setButtons(undefined)
+    updateModal({
+      icon: initialState?.icon,
+      message: initialState?.message,
+      title: initialState?.title,
+    })
+    setButtons(initialState?.buttons)
   }
 
   const modal = {

@@ -81,12 +81,13 @@ export function SpecialtyForm({
           <p className="text-center text-2xl font-semibold m-0">{formTitle}</p>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="name">
-              Nombre <span className="text-red-500 text-sm">*</span>
+              Nombre<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
               id="name"
               name="name"
+              placeholder="Pediatría"
             />
             <ErrorMessage
               className="text-red-500 text-sm"
@@ -96,12 +97,13 @@ export function SpecialtyForm({
           </div>
           <div className="inline-flex flex-col gap-y-2">
             <label className="flex items-start" htmlFor="description">
-              Descripción <span className="text-red-500 text-sm">*</span>
+              Descripción<span className="text-red-500 text-sm">*</span>
             </label>
             <Field
               className="border-gray-300 border rounded-md p-2"
               id="description"
               name="description"
+              placeholder="Analiza..."
             />
             <ErrorMessage
               className="text-red-500 text-sm"

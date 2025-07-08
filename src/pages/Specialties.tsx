@@ -16,7 +16,7 @@ export function Specialties() {
   const {
     specialties,
     loading,
-    addSpecialty,
+    createSpecialty,
     updateSpecialty,
     deleteSpecialty,
   } = useSpecialties()
@@ -47,9 +47,9 @@ export function Specialties() {
     }))
   }
 
-  const createSpecialty = async (form: FormValues) => {
+  const addSpecialty = async (form: FormValues) => {
     const specialty = mapToCreateSpecialty(form)
-    await addSpecialty(specialty)
+    await createSpecialty(specialty)
     closeSpecialtyModal()
   }
 
@@ -76,14 +76,17 @@ export function Specialties() {
     }
   }
 
-  const handleSubmit = (form: FormValues, mode: SpecialtyModalData['mode']) => {
+  const handleSubmit = async (
+    form: FormValues,
+    mode: SpecialtyModalData['mode']
+  ) => {
     switch (mode) {
       case 'add':
-        createSpecialty(form)
+        await addSpecialty(form)
         break
 
       case 'edit':
-        modifySpecialty(form)
+        await modifySpecialty(form)
         break
     }
   }
@@ -129,7 +132,7 @@ export function Specialties() {
     <main className="p-8">
       <h1 className="text-4xl font-semibold">Gestionar Especialidades</h1>
       <div className="flex justify-between items-center py-8">
-        <SearchForm />
+        <SearchForm placeholder="Oftalmología" />
         <button
           className="bg-blue-500 text-white p-2 rounded-md  h-fit"
           type="button"

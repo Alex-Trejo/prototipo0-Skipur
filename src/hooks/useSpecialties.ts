@@ -5,25 +5,29 @@ import {
   type UpdateSpecialty,
 } from '../types/specialty'
 import {
-  createSpecialty,
-  deleteSpecialty,
-  getSpecialties,
-  updateSpecialty,
+  createSpecialtyService,
+  deleteSpecialtyService,
+  getSpecialtiesService,
+  updateSpecialtyService,
 } from '../services/specialty'
 
-export function useSpecialties() {
+interface Options {
+  includeInactive?: boolean
+}
+
+export function useSpecialties(options: Options = { includeInactive: true }) {
   const [specialties, setSpecialties] = useState<Specialty[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getSpecialties()
+    getSpecialtiesService(options)
       .then((s) => setSpecialties(s))
       .catch(() => setSpecialties([]))
       .finally(() => setLoading(false))
-  }, [])
+  }, [options])
 
-  const add = async (specialty: CreateSpecialty) => {
-    const newSpecialty = await createSpecialty(specialty)
+  const createSpecialty = async (specialty: CreateSpecialty) => {
+    const newSpecialty = await createSpecialtyService(specialty)
 
     setSpecialties((specialties) => {
       const newSpecialties = [...specialties]
@@ -32,8 +36,8 @@ export function useSpecialties() {
     })
   }
 
-  const update = async (id: string, specialty: UpdateSpecialty) => {
-    const specialtyUpdated = await updateSpecialty(id, specialty)
+  const updateSpecialty = async (id: string, specialty: UpdateSpecialty) => {
+    const specialtyUpdated = await updateSpecialtyService(id, specialty)
 
     setSpecialties((specialties) => {
       const updatedSpecialties = specialties.map((specialty) =>
@@ -43,8 +47,8 @@ export function useSpecialties() {
     })
   }
 
-  const remove = async (id: string) => {
-    await deleteSpecialty(id)
+  const deleteSpecialty = async (id: string) => {
+    await deleteSpecialtyService(id)
 
     setSpecialties((specialties) =>
       specialties.map((specialty) =>
@@ -61,8 +65,8 @@ export function useSpecialties() {
   return {
     specialties,
     loading,
-    addSpecialty: add,
-    updateSpecialty: update,
-    deleteSpecialty: remove,
+    createSpecialty,
+    updateSpecialty,
+    deleteSpecialty,
   }
 }

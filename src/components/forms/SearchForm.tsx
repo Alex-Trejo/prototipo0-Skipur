@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 
 interface Props {
+  placeholder?: string
   onSubmit?: (query: string) => void | Promise<void>
 }
 
@@ -12,7 +13,7 @@ const initialValues: FormValues = {
   search: '',
 }
 
-export function SearchForm({ onSubmit }: Props) {
+export function SearchForm({ placeholder = '', onSubmit }: Props) {
   const handleSubmit = (values: FormValues) => {
     onSubmit?.(values.search)
   }
@@ -26,7 +27,7 @@ export function SearchForm({ onSubmit }: Props) {
           id="search"
           name="search"
           type="search"
-          placeholder="Oftalmologia"
+          placeholder={placeholder}
         />
       </Form>
     </Formik>

@@ -1,16 +1,17 @@
 import { Route, Routes } from 'react-router'
 import './App.css'
-import { AdminLayout } from './components/layouts/Admin'
-import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import {
   AdminHome,
+  Availabilities,
   Login,
   NotFound,
   Register,
+  SpecialistHome,
   Specialists,
   Specialties,
 } from './pages'
-import { AuthProvider } from './components/auth/AuthProvider'
+import { AdminLayout, SpecialistLayout } from './components/layouts'
+import { AuthProvider, ProtectedRoute } from './components/auth'
 
 function App() {
   return (
@@ -24,6 +25,13 @@ function App() {
             <Route index element={<AdminHome />} />
             <Route path="specialties" element={<Specialties />} />
             <Route path="specialists" element={<Specialists />} />
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRoles={['ESPECIALISTA']} />}>
+          <Route path="/specialist" element={<SpecialistLayout />}>
+            <Route index element={<SpecialistHome />} />
+            <Route path="availabilities" element={<Availabilities />} />
           </Route>
         </Route>
 

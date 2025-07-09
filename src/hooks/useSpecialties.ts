@@ -15,16 +15,16 @@ interface Options {
   includeInactive?: boolean
 }
 
-export function useSpecialties(options: Options = { includeInactive: true }) {
+export function useSpecialties({ includeInactive = true }: Options = {}) {
   const [specialties, setSpecialties] = useState<Specialty[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getSpecialtiesService(options)
+    getSpecialtiesService({ includeInactive })
       .then((s) => setSpecialties(s))
       .catch(() => setSpecialties([]))
       .finally(() => setLoading(false))
-  }, [options])
+  }, [includeInactive])
 
   const createSpecialty = async (specialty: CreateSpecialty) => {
     const newSpecialty = await createSpecialtyService(specialty)

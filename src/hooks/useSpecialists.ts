@@ -15,16 +15,16 @@ interface Options {
   includeInactive?: boolean
 }
 
-export function useSpecialists(options: Options = { includeInactive: true }) {
+export function useSpecialists({ includeInactive = true }: Options = {}) {
   const [specialists, setSpecialists] = useState<Specialist[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getSpecialistsService(options)
+    getSpecialistsService({ includeInactive })
       .then((s) => setSpecialists(s))
       .catch(() => setSpecialists([]))
       .finally(() => setLoading(false))
-  }, [options])
+  }, [includeInactive])
 
   const createSpecialist = async (specialist: CreateSpecialist) => {
     const newSpecialist = await createSpecialistService(specialist)

@@ -32,8 +32,8 @@ export function SpecialistsTable({
             <th>Email</th>
             <th>Titulo</th>
             <th>Especialidad</th>
-            <th>Activo</th>
-            <th>Acciones</th>
+            <th className="column-center">Activo</th>
+            <th className="column-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -53,18 +53,18 @@ export function SpecialistsTable({
                 <td>{specialist.title}</td>
                 <td>
                   {getSpecialty(specialist.specialtyId)?.name ?? (
-                    <ImSpinner8 className="animate-spin" />
+                    <ImSpinner8 className="animate-spin mx-auto" />
                   )}
                 </td>
-                <td>
+                <td className="column-center">
                   {specialist.isActive ? (
-                    <FaCheck className="text-green-500" />
+                    <FaCheck className="text-green-500 inline" />
                   ) : (
-                    <FaXmark className="text-red-500" />
+                    <FaXmark className="text-red-500 inline" />
                   )}
                 </td>
                 <td>
-                  <div className="flex gap-x-3 items-center">
+                  <div className="flex gap-x-3 items-center justify-center">
                     <button
                       className="p-2 bg-yellow-500 rounded-md"
                       type="button"

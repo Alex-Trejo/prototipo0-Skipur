@@ -2,6 +2,11 @@ button {
   cursor: pointer;
 }
 
+a,
+button {
+  transition: background-color 300ms ease-in-out;
+}
+
 input[type='search']::-webkit-search-cancel-button {
   appearance: none;
 }
@@ -12,11 +17,14 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .table {
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
 
   th {
     text-align: start;
+  }
+
+  .column-center {
+    text-align: center;
   }
 
   td,

@@ -25,8 +25,8 @@ export function SpecialtiesTable({
           <tr>
             <th>Nombre de la especialidad</th>
             <th>Descripción</th>
-            <th>Activo</th>
-            <th>Acciones</th>
+            <th className="column-center">Activo</th>
+            <th className="column-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -43,15 +43,15 @@ export function SpecialtiesTable({
               <tr key={specialty.id}>
                 <td>{specialty.name}</td>
                 <td>{specialty.description}</td>
-                <td>
+                <td className="column-center">
                   {specialty.isActive ? (
-                    <FaCheck className="text-green-500" />
+                    <FaCheck className="text-green-500 inline" />
                   ) : (
-                    <FaXmark className="text-red-500" />
+                    <FaXmark className="text-red-500 inline" />
                   )}
                 </td>
                 <td>
-                  <div className="flex gap-x-3 items-center">
+                  <div className="flex gap-x-3 items-center justify-center">
                     <button
                       className="p-2 bg-yellow-500 rounded-md"
                       type="button"

@@ -15,7 +15,8 @@ export function useAvailabilities({ userId, startTime, endTime }: Options) {
   useEffect(() => {
     if (!userId) return
 
-    getAvailablitiesByRangeDateService(userId, {
+    getAvailablitiesByRangeDateService({
+      specialistId: userId,
       startTime: new Date(startTime),
       endTime: new Date(endTime),
     })

@@ -1,8 +1,12 @@
 import { Field, Form, Formik } from 'formik'
+import { FaXmark } from 'react-icons/fa6'
 
 interface Props {
+  id?: string
+  name?: string
   placeholder?: string
   onSubmit?: (query: string) => void | Promise<void>
+  onReset?: () => void
 }
 
 interface FormValues {
@@ -13,7 +17,13 @@ const initialValues: FormValues = {
   search: '',
 }
 
-export function SearchForm({ placeholder = '', onSubmit }: Props) {
+export function SearchForm({
+  id = 'search',
+  name = 'search',
+  placeholder = '',
+  onSubmit,
+  onReset,
+}: Props) {
   const handleSubmit = (values: FormValues) => {
     onSubmit?.(values.search)
   }
@@ -22,13 +32,22 @@ export function SearchForm({ placeholder = '', onSubmit }: Props) {
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       <Form className="flex gap-x-2 items-center">
         <label htmlFor="search">Buscar</label>
-        <Field
-          className="border-gray-300 border rounded-md p-2"
-          id="search"
-          name="search"
-          type="search"
-          placeholder={placeholder}
-        />
+        <span className="relative">
+          <Field
+            className="border-gray-300 border rounded-md p-2"
+            id={id}
+            name={name}
+            type="search"
+            placeholder={placeholder}
+          />
+          <button
+            className="absolute right-0 top-0 h-full flex items-center p-2"
+            type="reset"
+            onClick={onReset}
+          >
+            <FaXmark />
+          </button>
+        </span>
       </Form>
     </Formik>
   )

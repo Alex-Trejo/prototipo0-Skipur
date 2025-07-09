@@ -2,6 +2,10 @@ button {
   cursor: pointer;
 }
 
+input[type='search']::-webkit-search-cancel-button {
+  appearance: none;
+}
+
 .table {
   width: 100%;
 

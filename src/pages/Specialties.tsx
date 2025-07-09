@@ -4,13 +4,14 @@ import {
   type SpecialtyModalData,
   SpecialtyModal,
 } from '../components/modals/SpecialtyModal'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Specialty } from '../types/specialty'
 import { MessageModal } from '../components/modals/MessageModal'
 import { useSpecialties } from '../hooks/useSpecialties'
 import type { FormValues } from '../components/forms/SpecialtyForm'
 import { mapToCreateSpecialty, mapToUpdateSpecialty } from '../utils/specialty'
 import { useMessageModal } from '../hooks/useMessageModal'
+import { useSearch } from '../hooks/useSearch'
 
 export function Specialties() {
   const {
@@ -20,13 +21,25 @@ export function Specialties() {
     updateSpecialty,
     deleteSpecialty,
   } = useSpecialties()
+
   const [specialtyModal, setSpecialtyModal] = useState<SpecialtyModalData>({
     initialValues: undefined,
     mode: 'add',
     open: false,
   })
+
   const { modal, openModal, closeModal, closeAndResetModal } = useMessageModal({
     title: 'Especialidad',
+  })
+
+  const filterByName = (specialty: Specialty, query: string) => {
+    return specialty.name
+      .toLocaleLowerCase()
+      .includes(query.trim().toLocaleLowerCase())
+  }
+
+  const [filteredSpecialties, { search, reset }] = useSearch(specialties, {
+    filterBy: filterByName,
   })
 
   const openSpecialtyModal = (
@@ -128,11 +141,21 @@ export function Specialties() {
     })
   }
 
+  const specialtiesToShow = useMemo(() => {
+    return filteredSpecialties.length < specialties.length
+      ? filteredSpecialties
+      : specialties
+  }, [filteredSpecialties, specialties])
+
   return (
     <main className="p-8">
       <h1 className="text-4xl font-semibold">Gestionar Especialidades</h1>
       <div className="flex justify-between items-center py-8">
-        <SearchForm placeholder="Oftalmología" />
+        <SearchForm
+          placeholder="Oftalmología"
+          onSubmit={search}
+          onReset={reset}
+        />
         <button
           className="bg-blue-500 text-white p-2 rounded-md  h-fit"
           type="button"
@@ -142,7 +165,7 @@ export function Specialties() {
         </button>
       </div>
       <SpecialtiesTable
-        specialties={specialties}
+        specialties={specialtiesToShow}
         loading={loading}
         onEdit={(specialty) => openSpecialtyModal('edit', specialty)}
         onDelete={handleDelete}

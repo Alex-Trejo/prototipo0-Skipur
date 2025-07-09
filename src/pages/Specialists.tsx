@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { MessageModal } from '../components/modals/MessageModal'
 import {
   SpecialistModal,
@@ -14,6 +14,7 @@ import {
   mapToUpdateSpecialist,
 } from '../utils/specialist'
 import { SearchForm } from '../components/forms/SearchForm'
+import { useSearch } from '../hooks/useSearch'
 
 export function Specialists() {
   const {
@@ -23,12 +24,24 @@ export function Specialists() {
     updateSpecialist,
     deleteSpecialist,
   } = useSpecialists()
+
   const { modal, openModal, closeAndResetModal, closeModal } = useMessageModal({
     title: 'Especialista',
   })
+
   const [specialistModal, setSpecialistModal] = useState<SpecialistModalData>({
     initialValues: undefined,
     open: false,
+  })
+
+  const filterByName = (specialist: Specialist, query: string) => {
+    return specialist.fullName
+      .toLocaleLowerCase()
+      .includes(query.trim().toLocaleLowerCase())
+  }
+
+  const [filteredSpecialists, { reset, search }] = useSearch(specialists, {
+    filterBy: filterByName,
   })
 
   const openSpecialistModal = (
@@ -130,11 +143,17 @@ export function Specialists() {
     })
   }
 
+  const specialistsToShow = useMemo(() => {
+    return filteredSpecialists.length < specialists.length
+      ? filteredSpecialists
+      : specialists
+  }, [filteredSpecialists, specialists])
+
   return (
     <main className="p-8">
       <h1 className="text-4xl font-semibold">Gestionar Especialistas</h1>
       <div className="flex justify-between items-center py-8">
-        <SearchForm placeholder="Jane Doe" />
+        <SearchForm placeholder="Jane Doe" onSubmit={search} onReset={reset} />
         <button
           className="bg-blue-500 text-white p-2 rounded-md  h-fit"
           type="button"
@@ -144,7 +163,7 @@ export function Specialists() {
         </button>
       </div>
       <SpecialistsTable
-        specialists={specialists}
+        specialists={specialistsToShow}
         loading={loading}
         onEdit={(specialty) => openSpecialistModal('edit', specialty)}
         onDelete={handleDelete}

@@ -155,7 +155,7 @@ export function Specialists() {
       <div className="flex justify-between items-center py-8">
         <SearchForm placeholder="Jane Doe" onSubmit={search} onReset={reset} />
         <button
-          className="bg-blue-500 text-white p-2 rounded-md  h-fit"
+          className="bg-blue-500 text-white p-2 rounded-md h-fit"
           type="button"
           onClick={() => openSpecialistModal('add')}
         >

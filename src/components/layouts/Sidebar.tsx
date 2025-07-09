@@ -18,7 +18,7 @@ export function SidebarLayout({ options, children }: Props) {
   const { logout } = useAuth()
 
   return (
-    <div className="min-h-dvh grid grid-cols-[minmax(auto,_280px)_1fr]">
+    <div className="min-h-dvh grid grid-cols-[280px_1fr] max-w-full overflow-x-hidden">
       <header className="bg-slate-700 text-white relative">
         <nav className="p-5 sticky top-0 min-h-dvh flex flex-col justify-between">
           <div className="flex flex-col gap-y-8">
@@ -53,7 +53,7 @@ export function SidebarLayout({ options, children }: Props) {
             </ul>
           </div>
           <button
-            className="rounded-md hover:bg-red-500  py-3 px-5 flex items-center gap-x-2"
+            className="rounded-md hover:bg-red-500 py-3 px-5 flex items-center gap-x-2"
             type="button"
             onClick={logout}
           >
@@ -62,7 +62,7 @@ export function SidebarLayout({ options, children }: Props) {
           </button>
         </nav>
       </header>
-      <main>{children}</main>
+      {children}
     </div>
   )
 }

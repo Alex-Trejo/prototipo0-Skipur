@@ -19,63 +19,65 @@ export function SpecialtiesTable({
   onDelete,
 }: Props) {
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>Nombre de la especialidad</th>
-          <th>Descripción</th>
-          <th>Activo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {loading ? (
+    <div className="table-x-scroll">
+      <table className="table">
+        <thead>
           <tr>
-            <td colSpan={COLUMNS}>
-              <span className="inline-flex items-center gap-x-2">
-                <ImSpinner8 className="animate-spin" /> Cargando
-              </span>
-            </td>
+            <th>Nombre de la especialidad</th>
+            <th>Descripción</th>
+            <th>Activo</th>
+            <th>Acciones</th>
           </tr>
-        ) : specialties?.length ? (
-          specialties.map((specialty) => (
-            <tr key={specialty.id}>
-              <td>{specialty.name}</td>
-              <td>{specialty.description}</td>
-              <td>
-                {specialty.isActive ? (
-                  <FaCheck className="text-green-500" />
-                ) : (
-                  <FaXmark className="text-red-500" />
-                )}
-              </td>
-              <td>
-                <div className="flex gap-x-3 items-center">
-                  <button
-                    className="p-2 bg-yellow-500 rounded-md"
-                    type="button"
-                    onClick={() => onEdit?.(specialty)}
-                  >
-                    <FaEdit className="text-white w-[12px] h-[12px]" />
-                  </button>
-                  <button
-                    className="p-2 bg-red-500 rounded-md"
-                    type="button"
-                    onClick={() => onDelete?.(specialty)}
-                    disabled={!specialty.isActive}
-                  >
-                    <FaTrash className="text-white w-[12px] h-[12px]" />
-                  </button>
-                </div>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={COLUMNS}>
+                <span className="inline-flex items-center gap-x-2">
+                  <ImSpinner8 className="animate-spin" /> Cargando
+                </span>
               </td>
             </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan={COLUMNS}>No hay especialidades registradas</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+          ) : specialties?.length ? (
+            specialties.map((specialty) => (
+              <tr key={specialty.id}>
+                <td>{specialty.name}</td>
+                <td>{specialty.description}</td>
+                <td>
+                  {specialty.isActive ? (
+                    <FaCheck className="text-green-500" />
+                  ) : (
+                    <FaXmark className="text-red-500" />
+                  )}
+                </td>
+                <td>
+                  <div className="flex gap-x-3 items-center">
+                    <button
+                      className="p-2 bg-yellow-500 rounded-md"
+                      type="button"
+                      onClick={() => onEdit?.(specialty)}
+                    >
+                      <FaEdit className="text-white w-[12px] h-[12px]" />
+                    </button>
+                    <button
+                      className="p-2 bg-red-500 rounded-md"
+                      type="button"
+                      onClick={() => onDelete?.(specialty)}
+                      disabled={!specialty.isActive}
+                    >
+                      <FaTrash className="text-white w-[12px] h-[12px]" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={COLUMNS}>No hay especialidades registradas</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   )
 }

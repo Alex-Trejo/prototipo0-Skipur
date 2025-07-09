@@ -6,8 +6,14 @@ input[type='search']::-webkit-search-cancel-button {
   appearance: none;
 }
 
-.table {
+.table-x-scroll {
+  overflow-x: auto;
   width: 100%;
+}
+
+.table {
+  width: max-content;
+  min-width: 100%;
 
   th {
     text-align: start;
@@ -30,4 +36,8 @@ input[type='search']::-webkit-search-cancel-button {
   td[colspan]:not([colspan='1']) {
     text-align: center;
   }
+}
+
+main {
+  overflow-x: hidden;
 }

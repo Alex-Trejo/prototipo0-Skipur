@@ -18,7 +18,7 @@ export function SidebarLayout({ options, children }: Props) {
   const { logout } = useAuth()
 
   return (
-    <div className="min-h-dvh grid grid-cols-[280px_1fr] max-w-full overflow-x-hidden">
+    <div className="min-h-dvh grid grid-cols-[280px_1fr] max-w-full">
       <header className="bg-slate-700 text-white relative">
         <nav className="p-5 sticky top-0 min-h-dvh flex flex-col justify-between">
           <div className="flex flex-col gap-y-8">

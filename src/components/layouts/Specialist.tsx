@@ -7,7 +7,7 @@ export function SpecialistLayout() {
     {
       icon: <RiCalendarScheduleFill className="w-[14px] h-[14px]" />,
       label: 'Gestionar Disponibilidad',
-      path: '/specialist/availabilities',
+      path: '/specialist/availability',
     },
   ]
 

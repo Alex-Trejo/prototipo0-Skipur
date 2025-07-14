@@ -1,33 +1,28 @@
-import type { AvailabilityDto } from '../types/availability'
-import { buildApiRequestParams, type QueryParamsMapper } from '../utils/api'
+import type {
+  AvailabilityDto,
+  CreateAvailabilityDto,
+  UpdateAvailabilityDto,
+} from '../types/availability'
 import api from './api'
 
-interface GetAvailabilitiesByRangeDateQueryParams {
-  startTime: Date
-  endTime: Date
+export async function getAvailabilityBySpecialistIdRequest(
+  specialistId: string
+): Promise<AvailabilityDto> {
+  const response = await api.get(`/availabilities/specialist/${specialistId}`)
+  return response.data as AvailabilityDto
 }
 
-export async function getAvailabilitiesByRangeDateRequest(
-  specialistId: string,
-  { startTime, endTime }: GetAvailabilitiesByRangeDateQueryParams
-): Promise<AvailabilityDto[]> {
-  const queryParamsMap: QueryParamsMapper<GetAvailabilitiesByRangeDateQueryParams> =
-    {
-      startTime: {
-        param: 'start',
-        value: startTime,
-        parser: (date: Date) => date.toISOString(),
-      },
-      endTime: {
-        param: 'end',
-        value: endTime,
-        parser: (date: Date) => date.toISOString(),
-      },
-    }
+export async function createAvailabilityRequest(
+  dto: CreateAvailabilityDto
+): Promise<AvailabilityDto> {
+  const response = await api.post('/availabilities', dto)
+  return response.data as AvailabilityDto
+}
 
-  const params = buildApiRequestParams(queryParamsMap)
-  const response = await api.get(`/availabilities/specialist/${specialistId}`, {
-    params,
-  })
-  return response.data as AvailabilityDto[]
+export async function updateAvailabilityRequest(
+  id: string,
+  dto: UpdateAvailabilityDto
+): Promise<AvailabilityDto> {
+  const response = await api.put(`/availabilities/${id}`, dto)
+  return response.data as AvailabilityDto
 }

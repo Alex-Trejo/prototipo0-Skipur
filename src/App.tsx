@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router'
 import './App.css'
 import {
   AdminHome,
-  Availabilities,
+  Availability,
   Login,
   NotFound,
   Register,
@@ -31,7 +31,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['ESPECIALISTA']} />}>
           <Route path="/specialist" element={<SpecialistLayout />}>
             <Route index element={<SpecialistHome />} />
-            <Route path="availabilities" element={<Availabilities />} />
+            <Route path="availability" element={<Availability />} />
           </Route>
         </Route>
 

@@ -38,3 +38,19 @@ export interface Availability {
   schedule: Schedule
   createdAt: Date
 }
+
+export interface CreateAvailability {
+  schedule: Schedule
+}
+
+export interface CreateAvailabilityDto {
+  schedule: ScheduleDto
+}
+
+export interface UpdateAvailability {
+  schedule: Schedule
+}
+
+export interface UpdateAvailabilityDto {
+  schedule: ScheduleDto
+}

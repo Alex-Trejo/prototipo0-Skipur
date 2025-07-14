@@ -1,8 +1,13 @@
+import { WEEK_DAY_MAP } from '../constants/availability'
 import type {
   Availability,
   AvailabilityDto,
+  CreateAvailability,
+  CreateAvailabilityDto,
   Schedule,
   ScheduleDto,
+  UpdateAvailability,
+  UpdateAvailabilityDto,
   WeekDay,
   WeekDayDto,
   WorkRangeTime,
@@ -24,18 +29,8 @@ function mapFromWorkRangeTimeDto(dto: WorkRangeTimeDto): WorkRangeTime {
   }
 }
 
-function mapFromWeekDayDto(weekDay: WeekDayDto): WeekDay {
-  const weekDayMap: Record<WeekDayDto, WeekDay> = {
-    Domingo: 0,
-    Lunes: 1,
-    Martes: 2,
-    Miercoles: 3,
-    Jueves: 4,
-    Viernes: 5,
-    Sabado: 6,
-  }
-
-  return weekDayMap[weekDay]
+function getWeekDay(weekDay: WeekDayDto): WeekDay {
+  return WEEK_DAY_MAP[weekDay]
 }
 
 function mapFromScheduleJson(json: string): Schedule {
@@ -45,7 +40,7 @@ function mapFromScheduleJson(json: string): Schedule {
     const schedule: Schedule = {}
 
     for (const [key, value] of Object.entries(scheduleDto)) {
-      schedule[mapFromWeekDayDto(key as WeekDayDto)] = value.map(
+      schedule[getWeekDay(key as WeekDayDto)] = value.map(
         mapFromWorkRangeTimeDto
       )
     }
@@ -62,5 +57,56 @@ export function mapFromAvailabilityDto(dto: AvailabilityDto): Availability {
     specialistId: dto.specialist_id,
     schedule: mapFromScheduleJson(dto.schedule),
     createdAt: new Date(dto.created_at),
+  }
+}
+
+function getWeekDayDto(weekDay: WeekDay): WeekDayDto {
+  const weekDayKey = Object.keys(WEEK_DAY_MAP).find(
+    (k) => WEEK_DAY_MAP[k as WeekDayDto] === weekDay
+  )
+
+  if (weekDayKey == null) {
+    throw new Error('Invalidad week day')
+  }
+
+  return weekDayKey as WeekDayDto
+}
+
+function mapToWorkTimeDto(workTime: Date): WorkTimeDto {
+  const hours = workTime.getHours()
+  const minutes = workTime.getMinutes()
+  return `${hours}:${minutes}`
+}
+
+function mapToWorkRangeTimeDto(workRangeTime: WorkRangeTime): WorkRangeTimeDto {
+  return {
+    end: mapToWorkTimeDto(workRangeTime.end),
+    start: mapToWorkTimeDto(workRangeTime.start),
+  }
+}
+
+function mapToScheduleDto(schedule: Schedule): ScheduleDto {
+  const dto: ScheduleDto = {}
+  for (const [key, value] of Object.entries(schedule)) {
+    const weekDay = Number(key)
+    dto[getWeekDayDto(weekDay as WeekDay)] = value.map(mapToWorkRangeTimeDto)
+  }
+
+  return dto
+}
+
+export function mapToCreateAvailabilityDto(
+  availability: CreateAvailability
+): CreateAvailabilityDto {
+  return {
+    schedule: mapToScheduleDto(availability.schedule),
+  }
+}
+
+export function mapToUpdateAvailabilityDto(
+  availability: UpdateAvailability
+): UpdateAvailabilityDto {
+  return {
+    schedule: mapToScheduleDto(availability.schedule),
   }
 }

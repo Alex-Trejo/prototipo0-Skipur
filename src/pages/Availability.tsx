@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { Schedule } from '../components/calendars/Schedule'
 import type {
   Availability,
   Schedule as ScheduleType,
@@ -10,6 +9,7 @@ import { useAvailability } from '../hooks/useAvailability'
 import { useAuth } from '../hooks/useAuth'
 import { MessageModal } from '../components/modals/MessageModal'
 import { useMessageModal } from '../hooks/useMessageModal'
+import { Schedule } from '../components/calendars'
 
 export function Availability() {
   const { authUser } = useAuth()

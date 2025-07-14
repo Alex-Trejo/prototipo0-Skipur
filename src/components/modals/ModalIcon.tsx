@@ -1,6 +1,11 @@
-import { MdOutlineError, MdOutlineInfo, MdOutlineWarning } from 'react-icons/md'
+import {
+  MdOutlineError,
+  MdOutlineInfo,
+  MdOutlineQuestionMark,
+  MdOutlineWarning,
+} from 'react-icons/md'
 
-export type ModalIconType = 'info' | 'error' | 'danger'
+export type ModalIconType = 'info' | 'error' | 'danger' | 'question'
 
 interface ModalIconProps {
   icon: ModalIconType
@@ -12,6 +17,9 @@ export function ModalIcon({ icon }: ModalIconProps) {
     info: <MdOutlineInfo className={`${baseClass} text-gray-500`} />,
     error: <MdOutlineError className={`${baseClass} text-red-500`} />,
     danger: <MdOutlineWarning className={`${baseClass} text-yellow-500`} />,
+    question: (
+      <MdOutlineQuestionMark className={`${baseClass} text-blue-500`} />
+    ),
   }
   return icons[icon] ?? icons.info
 }

@@ -73,8 +73,8 @@ function getWeekDayDto(weekDay: WeekDay): WeekDayDto {
 }
 
 function mapToWorkTimeDto(workTime: Date): WorkTimeDto {
-  const hours = workTime.getHours()
-  const minutes = workTime.getMinutes()
+  const hours = workTime.getHours().toString().padStart(2, '0')
+  const minutes = workTime.getMinutes().toString().padStart(2, '0')
   return `${hours}:${minutes}`
 }
 

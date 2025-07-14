@@ -7,7 +7,7 @@ export type WeekDayDto =
   | 'Sabado'
   | 'Domingo'
 
-type WorkTimeDto = `${number}:${number}`
+type WorkTimeDto = `${string}:${string}`
 
 export interface WorkRangeTimeDto {
   start: WorkTimeDto

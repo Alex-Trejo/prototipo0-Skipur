@@ -1,7 +1,7 @@
 import Logo from '../../assets/images/logo.png'
-import { MdLogout } from 'react-icons/md'
 import { NavLink } from 'react-router'
 import { useAuth } from '../../hooks/useAuth'
+import { IconFactory } from '../factory/IconFactory'
 
 export interface SidebarOption {
   icon: React.ReactNode
@@ -57,7 +57,7 @@ export function SidebarLayout({ options, children }: Props) {
             type="button"
             onClick={logout}
           >
-            <MdLogout className="w-[16px] h-[16px]" />
+            <IconFactory name="logout" className="w-[16px] h-[16px]" />
             Cerrar Sesión
           </button>
         </nav>

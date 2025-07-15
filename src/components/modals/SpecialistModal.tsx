@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { HiOutlineX } from 'react-icons/hi'
 import { Modal } from './Modal'
 import {
   SpecialistForm,
   type FormData,
   type FormValues,
 } from '../forms/SpecialistForm'
+import { IconFactory } from '../factory/IconFactory'
 
 export interface SpecialistModalData extends FormData {
   open?: boolean
@@ -56,7 +56,10 @@ export function SpecialistModal({
           onClick={onClose}
           disabled={isSubmitting}
         >
-          <HiOutlineX className=" text-red-500 w-[20px] h-[20px]" />
+          <IconFactory
+            name="close"
+            className="text-red-500 w-[20px] h-[20px]"
+          />
         </button>
         <SpecialistForm
           onSubmit={handleSubmit}

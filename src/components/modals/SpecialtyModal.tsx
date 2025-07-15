@@ -4,8 +4,8 @@ import {
   type FormData,
   type FormValues,
 } from '../forms/SpecialtyForm'
-import { HiOutlineX } from 'react-icons/hi'
 import { Modal } from './Modal'
+import { IconFactory } from '../factory/IconFactory'
 
 export interface SpecialtyModalData extends FormData {
   open?: boolean
@@ -56,7 +56,10 @@ export function SpecialtyModal({
           onClick={onClose}
           disabled={isSubmitting}
         >
-          <HiOutlineX className=" text-red-500 w-[20px] h-[20px]" />
+          <IconFactory
+            name="close"
+            className="text-red-500 w-[20px] h-[20px]"
+          />
         </button>
         <SpecialtyForm
           onSubmit={handleSubmit}

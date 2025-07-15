@@ -1,5 +1,4 @@
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik'
-import { ImSpinner8 } from 'react-icons/im'
 import { getSexOptions } from '../../utils/sex'
 import * as Yup from 'yup'
 import {
@@ -11,6 +10,7 @@ import {
 } from '../../utils/validation'
 import { Link } from 'react-router'
 import type { Sex } from '../../types/sex'
+import { IconFactory } from '../factory/IconFactory'
 
 export interface FormValues {
   representativeName: string
@@ -240,9 +240,7 @@ export function RegisterForm({ onSubmit, onError }: Props) {
             disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
-              {isSubmitting && (
-                <ImSpinner8 className="animate-spin" color="white" />
-              )}
+              {isSubmitting && <IconFactory name="loading" color="white" />}
               {isSubmitting ? 'Registrando cuenta' : 'Registrarse'}
             </span>
           </button>

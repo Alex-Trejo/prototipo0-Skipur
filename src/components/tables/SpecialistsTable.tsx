@@ -1,8 +1,6 @@
-import { ImSpinner8 } from 'react-icons/im'
 import type { Specialist } from '../../types/specialist'
-import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa'
 import { useSpecialtyCache } from '../../hooks/useSpecialtyCache'
-import { FaXmark } from 'react-icons/fa6'
+import { IconFactory } from '../factory/IconFactory'
 
 const COLUMNS = 6
 
@@ -41,7 +39,7 @@ export function SpecialistsTable({
             <tr>
               <td colSpan={COLUMNS}>
                 <span className="inline-flex items-center gap-x-2">
-                  <ImSpinner8 className="animate-spin" /> Cargando
+                  <IconFactory name="loading" /> Cargando
                 </span>
               </td>
             </tr>
@@ -53,14 +51,20 @@ export function SpecialistsTable({
                 <td>{specialist.title}</td>
                 <td>
                   {getSpecialty(specialist.specialtyId)?.name ?? (
-                    <ImSpinner8 className="animate-spin mx-auto" />
+                    <IconFactory name="loading" className="mx-auto" />
                   )}
                 </td>
                 <td className="column-center">
                   {specialist.isActive ? (
-                    <FaCheck className="text-green-500 inline" />
+                    <IconFactory
+                      name="valid"
+                      className="text-green-500 inline"
+                    />
                   ) : (
-                    <FaXmark className="text-red-500 inline" />
+                    <IconFactory
+                      name="invalid"
+                      className="text-red-500 inline"
+                    />
                   )}
                 </td>
                 <td>
@@ -70,7 +74,10 @@ export function SpecialistsTable({
                       type="button"
                       onClick={() => onEdit?.(specialist)}
                     >
-                      <FaEdit className="text-white w-[12px] h-[12px]" />
+                      <IconFactory
+                        name="edit"
+                        className="text-white w-[12px] h-[12px]"
+                      />
                     </button>
                     <button
                       className="p-2 bg-red-500 rounded-md"
@@ -78,7 +85,10 @@ export function SpecialistsTable({
                       onClick={() => onDelete?.(specialist)}
                       disabled={!specialist.isActive}
                     >
-                      <FaTrash className="text-white w-[12px] h-[12px]" />
+                      <IconFactory
+                        name="trash"
+                        className="text-white w-[12px] h-[12px]"
+                      />
                     </button>
                   </div>
                 </td>

@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik'
 import { useMemo } from 'react'
-import { ImSpinner8 } from 'react-icons/im'
 import * as Yup from 'yup'
+import { IconFactory } from '../factory/IconFactory'
 
 type FormMode = 'add' | 'edit'
 
@@ -117,9 +117,7 @@ export function SpecialtyForm({
             disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
-              {isSubmitting && (
-                <ImSpinner8 className="animate-spin" color="white" />
-              )}
+              {isSubmitting && <IconFactory name="loading" color="white" />}
               {isSubmitting ? 'Guardando' : 'Guardar'}
             </span>
           </button>

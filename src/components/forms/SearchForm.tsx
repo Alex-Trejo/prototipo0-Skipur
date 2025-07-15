@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik'
-import { FaXmark } from 'react-icons/fa6'
+import { IconFactory } from '../factory/IconFactory'
 
 interface Props {
   id?: string
@@ -45,7 +45,7 @@ export function SearchForm({
             type="reset"
             onClick={onReset}
           >
-            <FaXmark />
+            <IconFactory name="close" />
           </button>
         </span>
       </Form>

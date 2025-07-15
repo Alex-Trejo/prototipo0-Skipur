@@ -1,8 +1,8 @@
 import { Field, Form, Formik, type FormikHelpers } from 'formik'
 import Logo from '../../assets/images/logo.png'
 import { useState } from 'react'
-import { ImSpinner8 } from 'react-icons/im'
 import { Link } from 'react-router'
+import { IconFactory } from '../factory/IconFactory'
 
 export interface FormValues {
   email: string
@@ -82,9 +82,7 @@ export function LoginForm({ onSubmit, onError }: Props) {
             disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
-              {isSubmitting && (
-                <ImSpinner8 className="animate-spin" color="white" />
-              )}
+              {isSubmitting && <IconFactory name="loading" color="white" />}
               {isSubmitting ? 'Verificando' : 'Iniciar Sesión'}
             </span>
           </button>

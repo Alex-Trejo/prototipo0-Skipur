@@ -1,7 +1,5 @@
-import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa'
 import type { Specialty } from '../../types/specialty'
-import { ImSpinner8 } from 'react-icons/im'
-import { FaXmark } from 'react-icons/fa6'
+import { IconFactory } from '../factory/IconFactory'
 
 interface Props {
   specialties?: Specialty[] | null
@@ -34,7 +32,7 @@ export function SpecialtiesTable({
             <tr>
               <td colSpan={COLUMNS}>
                 <span className="inline-flex items-center gap-x-2">
-                  <ImSpinner8 className="animate-spin" /> Cargando
+                  <IconFactory name="loading" /> Cargando
                 </span>
               </td>
             </tr>
@@ -45,9 +43,15 @@ export function SpecialtiesTable({
                 <td>{specialty.description}</td>
                 <td className="column-center">
                   {specialty.isActive ? (
-                    <FaCheck className="text-green-500 inline" />
+                    <IconFactory
+                      name="valid"
+                      className="text-green-500 inline"
+                    />
                   ) : (
-                    <FaXmark className="text-red-500 inline" />
+                    <IconFactory
+                      name="invalid"
+                      className="text-red-500 inline"
+                    />
                   )}
                 </td>
                 <td>
@@ -57,7 +61,10 @@ export function SpecialtiesTable({
                       type="button"
                       onClick={() => onEdit?.(specialty)}
                     >
-                      <FaEdit className="text-white w-[12px] h-[12px]" />
+                      <IconFactory
+                        name="edit"
+                        className="text-white w-[12px] h-[12px]"
+                      />
                     </button>
                     <button
                       className="p-2 bg-red-500 rounded-md"
@@ -65,7 +72,10 @@ export function SpecialtiesTable({
                       onClick={() => onDelete?.(specialty)}
                       disabled={!specialty.isActive}
                     >
-                      <FaTrash className="text-white w-[12px] h-[12px]" />
+                      <IconFactory
+                        name="trash"
+                        className="text-white w-[12px] h-[12px]"
+                      />
                     </button>
                   </div>
                 </td>

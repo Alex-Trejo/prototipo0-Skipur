@@ -1,56 +1,37 @@
-export type WeekDayDto =
-  | 'Lunes'
-  | 'Martes'
-  | 'Miercoles'
-  | 'Jueves'
-  | 'Viernes'
-  | 'Sabado'
-  | 'Domingo'
-
-type WorkTimeDto = `${string}:${string}`
-
-export interface WorkRangeTimeDto {
-  start: WorkTimeDto
-  end: WorkTimeDto
-}
-
-export type ScheduleDto = Partial<Record<WeekDayDto, WorkRangeTimeDto[]>>
-
 export interface AvailabilityDto {
   id: string
   specialist_id: string
-  schedule: string
+  start_time: string
+  end_time: string
+  is_booked: boolean
   created_at: string
 }
-
-export type WeekDay = 0 | 1 | 2 | 3 | 4 | 5 | 6
-
-export interface WorkRangeTime {
-  start: Date
-  end: Date
-}
-
-export type Schedule = Partial<Record<WeekDay, WorkRangeTime[]>>
 
 export interface Availability {
   id: string
   specialistId: string
-  schedule: Schedule
+  startTime: Date
+  endTime: Date
+  isBooked: boolean
   createdAt: Date
 }
 
 export interface CreateAvailability {
-  schedule: Schedule
+  startTime: Date
+  endTime: Date
 }
 
 export interface CreateAvailabilityDto {
-  schedule: ScheduleDto
+  start_time: string
+  end_time: string
 }
 
 export interface UpdateAvailability {
-  schedule: Schedule
+  startTime: Date
+  endTime: Date
 }
 
 export interface UpdateAvailabilityDto {
-  schedule: ScheduleDto
+  start_time: string
+  end_time: string
 }

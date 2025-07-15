@@ -17,3 +17,19 @@ export function roundDownHour(date: Date): Date {
   result.setHours(date.getHours(), 0, 0, 0)
   return result
 }
+
+export function getStartWeek(firstDayIndex: number = 0): Date {
+  const today = new Date()
+  const startWeek = new Date()
+  startWeek.setDate(today.getDate() - today.getDay() + firstDayIndex)
+  return startWeek
+}
+
+export function getEndWeek(firstDayIndex: number = 0): Date {
+  const today = new Date()
+  const endWeek = new Date()
+  const endWeekIndex = 6
+  const daysUntilSunday = endWeekIndex - today.getDay()
+  endWeek.setDate(today.getDate() + daysUntilSunday + firstDayIndex)
+  return endWeek
+}

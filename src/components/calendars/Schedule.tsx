@@ -2,31 +2,37 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import esLocale from '@fullcalendar/core/locales/es'
-import type { AllowFunc, DateSelectArg } from '@fullcalendar/core/index.js'
-import { useMemo, useRef } from 'react'
-import type { Schedule, WeekDay, WorkRangeTime } from '../../types/availability'
-import { mapScheduleToEventsForWeek } from '../../utils/calendar'
-import { ScheduleEventContent } from './ScheduleEventContent'
-import { roundDownHour, roundUpToNextHour } from '../../utils/date'
+import type {
+  AllowFunc,
+  DateSelectArg,
+  DurationInput,
+} from '@fullcalendar/core/index.js'
+import { useRef } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
 
+export interface ScheduleEvent {
+  id: string
+  start: Date
+  end: Date
+  color?: string
+}
+
 interface Props {
-  schedule?: Schedule
+  events?: ScheduleEvent[]
   editable?: boolean
   loading?: boolean
-  onSelect?: (
-    weekDay: WeekDay,
-    workRange: WorkRangeTime
-  ) => Promise<void> | void
-  onDelete?: (index: number, weekDay: WeekDay) => Promise<void> | void
+  minTime?: DurationInput
+  maxTime?: DurationInput
+  onSelect?: (arg: { start: Date; end: Date }) => Promise<void> | void
 }
 
 export function Schedule({
-  schedule,
+  events,
   editable = false,
   loading = false,
+  minTime = '05:00:00',
+  maxTime = '21:00:00',
   onSelect,
-  onDelete,
 }: Props) {
   const ref = useRef<FullCalendar>(null)
 
@@ -36,21 +42,8 @@ export function Schedule({
   }
 
   const handleDateSelect = ({ start, end }: DateSelectArg) => {
-    onSelect?.(start.getDay() as WeekDay, {
-      start: roundDownHour(start),
-      end: roundUpToNextHour(end),
-    })
+    onSelect?.({ start, end })
   }
-
-  const handleDeleteEvent = (index: number, weekDay: WeekDay) => {
-    if (!editable) return
-    onDelete?.(index, weekDay)
-  }
-
-  const events = useMemo(() => {
-    if (!schedule) return []
-    return mapScheduleToEventsForWeek(schedule)
-  }, [schedule])
 
   return (
     <div className="relative">
@@ -65,33 +58,18 @@ export function Schedule({
         locale={esLocale}
         initialView="timeGridWeek"
         allDaySlot={false}
-        events={events}
         headerToolbar={false}
         dayHeaderFormat={{ weekday: 'long' }}
         slotLabelFormat={{ hour: '2-digit', minute: '2-digit', hour12: false }}
-        slotMinTime={'05:00:00'}
-        slotMaxTime={'21:00:00'}
+        slotMinTime={minTime}
+        slotMaxTime={maxTime}
         height={'auto'}
         stickyHeaderDates={false}
         selectOverlap={false}
         selectable={editable}
         selectAllow={handleSelectAllow}
         select={handleDateSelect}
-        eventContent={({
-          event: {
-            start,
-            end,
-            extendedProps: { index },
-          },
-        }) => (
-          <ScheduleEventContent
-            index={index}
-            start={start}
-            end={end}
-            onDelete={handleDeleteEvent}
-            editable={editable}
-          />
-        )}
+        events={events}
       />
     </div>
   )

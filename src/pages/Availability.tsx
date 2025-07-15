@@ -1,88 +1,105 @@
-import { useMemo, useState } from 'react'
-import type {
-  Availability,
-  Schedule as ScheduleType,
-  WeekDay,
-  WorkRangeTime,
-} from '../types/availability'
-import { useAvailability } from '../hooks/useAvailability'
-import { useAuth } from '../hooks/useAuth'
-import { MessageModal } from '../components/modals/MessageModal'
-import { useMessageModal } from '../hooks/useMessageModal'
+import { useEffect, useMemo, useState } from 'react'
 import { Schedule } from '../components/calendars'
+import { useAuth } from '../hooks/useAuth'
+import { useAvailabilities } from '../hooks/useAvailabilities'
+import { getEndWeek } from '../utils/date'
+import type { ScheduleEvent } from '../components/calendars/Schedule'
+import { useMessageModal } from '../hooks/useMessageModal'
+import { MessageModal } from '../components/modals/MessageModal'
+import type { CreateAvailability } from '../types/availability'
 
 export function Availability() {
   const { authUser } = useAuth()
 
-  const { availability, loading, modifySchedule } = useAvailability({
+  const currentSunday = useMemo(() => {
+    const firstDay = 1
+    return getEndWeek(firstDay)
+  }, [])
+
+  const { availabilities, createAvailability } = useAvailabilities({
     userId: authUser?.id,
+    end: currentSunday,
   })
 
-  const [tempSchedule, setTempSchedule] = useState<ScheduleType>()
-
-  const { modal, openModal, closeModal, closeAndResetModal } = useMessageModal({
+  const [editable, setIsEditableSchedule] = useState(false)
+  const { modal, openModal, closeAndResetModal } = useMessageModal({
     title: 'Disponibilidad',
   })
 
-  const handleSelect = (weekDay: WeekDay, workRange: WorkRangeTime) => {
-    setTempSchedule((schedule) => {
-      const newSchedule = structuredClone(schedule)
+  const [events, setEvents] = useState<ScheduleEvent[]>([])
 
-      if (!newSchedule) {
-        return schedule
-      }
+  useEffect(() => {
+    if (!availabilities || !availabilities.length) {
+      return
+    }
 
-      let workDay = newSchedule[weekDay]
+    setEvents(
+      availabilities.map((a) => ({
+        start: a.startTime,
+        end: a.endTime,
+        id: a.id,
+        color: 'seagreen',
+      }))
+    )
+  }, [availabilities])
 
-      if (!workDay) {
-        workDay = []
-      }
-
-      workDay.push(workRange)
-      newSchedule[weekDay] = workDay
-      return newSchedule
-    })
-  }
-
-  const handleDelete = (index: number, weekDay: WeekDay) => {
-    setTempSchedule((schedule) => {
-      if (!schedule) {
-        return schedule
-      }
-
-      const newSchedule = structuredClone(schedule)
-      const workDay = newSchedule[weekDay]
-
-      if (workDay) {
-        workDay.splice(index, 1)
-
-        if (workDay.length) {
-          newSchedule[weekDay] = workDay
-        } else {
-          delete newSchedule[weekDay]
-        }
-      }
-
-      return newSchedule
-    })
+  const handleSelect = ({ start, end }: { start: Date; end: Date }) => {
+    setEvents((prevEvents) => [
+      ...prevEvents,
+      {
+        end,
+        start,
+        id: start.toISOString(),
+        color: 'royalblue',
+      },
+    ])
   }
 
   const enableEditableSchedule = () => {
-    setTempSchedule(availability?.schedule ?? {})
+    setIsEditableSchedule(true)
+  }
+
+  const disableEditableSchedule = () => {
+    setIsEditableSchedule(false)
   }
 
   const cancelScheduleChanges = () => {
-    setTempSchedule(undefined)
+    disableEditableSchedule()
+    setEvents(
+      availabilities.map((a) => ({
+        start: a.startTime,
+        end: a.endTime,
+        id: a.id,
+        color: 'seagreen',
+      }))
+    )
   }
 
-  const saveScheduleChanges = async () => {
-    if (!tempSchedule) {
+  const saveScheduleChanges = async (newEvents: ScheduleEvent[]) => {
+    if (!events) {
       return
     }
 
     try {
-      await modifySchedule(tempSchedule)
-      closeModal()
+      await Promise.all(
+        newEvents.map(async (event) => {
+          const availability: CreateAvailability = {
+            endTime: event.end,
+            startTime: event.start,
+          }
+
+          return createAvailability(availability)
+        })
+      )
+
+      closeAndResetModal()
+      openModal({
+        data: {
+          icon: 'info',
+          message: 'Horario actualizado correctamente',
+        },
+      })
+      disableEditableSchedule()
     } catch {
       openModal({
         data: {
@@ -94,12 +111,6 @@ export function Availability() {
   }
 
   const handleSave = () => {
-    const isEmpty = !tempSchedule || !Object.keys(tempSchedule).length
-
-    if (isEmpty) {
-      return
-    }
-
     openModal({
       data: {
         message: '¿Estás seguro que deseas guardar los cambios?',
@@ -109,7 +120,12 @@ export function Availability() {
         {
           label: 'Guardar',
           style: 'primary',
-          onClick: saveScheduleChanges,
+          onClick: () => {
+            const newEvents = events.filter(
+              (e) => !availabilities.some((a) => a.id === e.id)
+            )
+            saveScheduleChanges(newEvents)
+          },
         },
         {
           label: 'Cancelar',
@@ -120,7 +136,9 @@ export function Availability() {
     })
   }
 
-  const editable = useMemo(() => tempSchedule != null, [tempSchedule])
+  const isScheduleModified = useMemo(() => {
+    return events.length > availabilities.length
+  }, [availabilities, events])
 
   return (
     <main className="p-8 h-dvh">
@@ -140,6 +158,7 @@ export function Availability() {
               className="bg-green-500 text-white p-2 rounded-md h-fit"
               type="button"
               onClick={handleSave}
+              disabled={!isScheduleModified}
             >
               Guardar cambios
             </button>
@@ -154,13 +173,7 @@ export function Availability() {
         )}
       </div>
 
-      <Schedule
-        editable={editable}
-        loading={loading}
-        schedule={tempSchedule}
-        onSelect={handleSelect}
-        onDelete={handleDelete}
-      />
+      <Schedule editable={editable} events={events} onSelect={handleSelect} />
 
       <MessageModal
         message={modal.message}

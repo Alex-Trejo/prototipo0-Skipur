@@ -2,35 +2,37 @@ import { useEffect, useState } from 'react'
 import type {
   Availability,
   CreateAvailability,
-  Schedule,
   UpdateAvailability,
 } from '../types/availability'
 import {
   createAvailabilityService,
+  deleteAvailabilityService,
   getAvailablityBySpecialistIdService,
   updateAvailabilityService,
 } from '../services/availability'
 
 interface Options {
   userId?: string
+  start?: Date
+  end?: Date
 }
 
-export function useAvailability({ userId }: Options) {
-  const [availability, setAvailability] = useState<Availability | null>(null)
+export function useAvailabilities({ userId, start, end }: Options) {
+  const [availabilities, setAvailabilities] = useState<Availability[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!userId) return
 
-    getAvailablityBySpecialistIdService(userId)
-      .then((a) => setAvailability(a))
-      .catch(() => setAvailability(null))
+    getAvailablityBySpecialistIdService(userId, { start, end })
+      .then((a) => setAvailabilities(a))
+      .catch(() => setAvailabilities([]))
       .finally(() => setLoading(false))
-  }, [userId])
+  }, [userId, start, end])
 
   const createAvailability = async (availability: CreateAvailability) => {
     const createdAvailability = await createAvailabilityService(availability)
-    setAvailability(createdAvailability)
+    setAvailabilities((prev) => [...prev, createdAvailability])
   }
 
   const updateAvailability = async (
@@ -42,27 +44,24 @@ export function useAvailability({ userId }: Options) {
       availability
     )
 
-    setAvailability(updatedAvailability)
+    setAvailabilities((availabilities) =>
+      availabilities.map((availability) =>
+        availability.id === updatedAvailability.id
+          ? updatedAvailability
+          : availability
+      )
+    )
   }
 
-  const modifySchedule = async (newSchedule: Schedule) => {
-    if (!availability?.id) {
-      const newAvailability: CreateAvailability = {
-        schedule: newSchedule,
-      }
-      await createAvailability(newAvailability)
-    } else {
-      const newAvailability: UpdateAvailability = {
-        schedule: newSchedule,
-      }
-
-      await updateAvailability(availability.id, newAvailability)
-    }
+  const deleteAvailability = async (id: string) => {
+    await deleteAvailabilityService(id)
   }
 
   return {
-    availability,
+    availabilities,
     loading,
-    modifySchedule,
+    createAvailability,
+    updateAvailability,
+    deleteAvailability,
   }
 }

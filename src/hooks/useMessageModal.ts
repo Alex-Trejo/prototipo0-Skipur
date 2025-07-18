@@ -1,75 +1,59 @@
 import { useState } from 'react'
-import { useModal, type ModalState } from './useModal'
-import type { ModalIconType } from '../components/modals/ModalIcon'
 import type { ModalButtonProps } from '../components/modals/ModalButton'
+import type { ModalIconType } from '../components/modals/ModalIcon'
 
-export interface MessageModalData {
+interface MessageModalState {
+  open: boolean
   title: string
   message: string
   icon: ModalIconType
+  buttons?: ModalButtonProps[]
 }
 
-export type MessageModalState = ModalState &
-  MessageModalData & {
-    buttons?: ModalButtonProps[]
-  }
-
 export function useMessageModal(initialState?: Partial<MessageModalState>) {
-  const {
-    open,
-    openModal: showModal,
-    closeModal,
-    toggleModal,
-  } = useModal({
+  const defaultState = (): MessageModalState => ({
     open: initialState?.open ?? false,
-  })
-
-  const [data, setData] = useState<MessageModalData>({
-    message: initialState?.message ?? '',
     title: initialState?.title ?? '',
+    message: initialState?.message ?? '',
     icon: initialState?.icon ?? 'info',
+    buttons: initialState?.buttons,
   })
 
-  const [buttons, setButtons] = useState(initialState?.buttons)
+  const [modalState, setModalState] = useState<MessageModalState>(defaultState)
 
-  const updateModal = (payload: Partial<MessageModalData>) => {
-    setData((data) => ({ ...data, ...payload }))
+  const resetModal = () => {
+    setModalState(defaultState())
   }
 
-  const openModal = ({
-    data,
-    buttons,
-  }: {
-    data?: Partial<MessageModalData>
-    buttons?: ModalButtonProps[]
-  }) => {
-    updateModal({ ...data })
-    setButtons(buttons)
-    showModal()
+  const openModal = (payload: Partial<Omit<MessageModalState, 'open'>>) => {
+    setModalState((prev) => ({
+      ...prev,
+      ...payload,
+      open: true,
+    }))
   }
 
-  const closeAndResetModal = () => {
-    closeModal()
-    updateModal({
-      icon: initialState?.icon,
-      message: initialState?.message,
-      title: initialState?.title,
-    })
-    setButtons(initialState?.buttons)
+  const closeModal = ({ reset }: { reset?: boolean } = {}) => {
+    if (reset) {
+      resetModal()
+    }
+
+    setModalState((prev) => ({ ...prev, open: false }))
   }
 
   const modal = {
-    open,
-    ...data,
-    buttons,
+    open: modalState.open,
+    data: {
+      title: modalState.title,
+      message: modalState.message,
+      icon: modalState.icon,
+    },
+    buttons: modalState.buttons,
   }
 
   return {
     modal,
-    updateModal,
     openModal,
     closeModal,
-    toggleModal,
-    closeAndResetModal,
   }
 }

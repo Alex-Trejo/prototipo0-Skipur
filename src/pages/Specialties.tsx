@@ -28,9 +28,11 @@ export function Specialties() {
     open: false,
   })
 
-  const { modal, openModal, closeModal, closeAndResetModal } = useMessageModal({
+  const { modal, openModal, closeModal } = useMessageModal({
     title: 'Especialidad',
   })
+
+  const closeAndResetModal = () => closeModal({ reset: true })
 
   const filterByName = (specialty: Specialty, query: string) => {
     return specialty.name
@@ -114,19 +116,15 @@ export function Specialties() {
     }
 
     openModal({
-      data: {
-        message: messages[mode],
-        icon: 'error',
-      },
+      message: messages[mode],
+      icon: 'error',
     })
   }
 
   const handleDelete = async (specialty: Specialty) => {
     openModal({
-      data: {
-        message: `¿Estas seguro que deseas eliminar la especialidad de "${specialty.name}"?`,
-        icon: 'danger',
-      },
+      message: `¿Estas seguro que deseas eliminar la especialidad de "${specialty.name}"?`,
+      icon: 'danger',
       buttons: [
         {
           label: 'Eliminar',
@@ -179,10 +177,8 @@ export function Specialties() {
         onError={showError}
       />
       <MessageModal
-        message={modal.message}
-        title={modal.title}
         open={modal.open}
-        icon={modal.icon}
+        data={modal.data}
         buttons={modal.buttons}
         onClose={closeAndResetModal}
       />

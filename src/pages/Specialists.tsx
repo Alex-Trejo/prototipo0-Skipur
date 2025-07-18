@@ -25,9 +25,11 @@ export function Specialists() {
     deleteSpecialist,
   } = useSpecialists()
 
-  const { modal, openModal, closeAndResetModal, closeModal } = useMessageModal({
+  const { modal, openModal, closeModal } = useMessageModal({
     title: 'Especialista',
   })
+
+  const closeAndResetModal = () => closeModal({ reset: true })
 
   const [specialistModal, setSpecialistModal] = useState<SpecialistModalData>({
     initialValues: undefined,
@@ -116,19 +118,16 @@ export function Specialists() {
     }
 
     openModal({
-      data: {
-        message: messages[mode],
-        icon: 'error',
-      },
+      message: messages[mode],
+      icon: 'error',
     })
   }
 
   const handleDelete = async (specialist: Specialist) => {
     openModal({
-      data: {
-        message: `¿Estas seguro que deseas eliminar al especialista "${specialist.fullName}"?`,
-        icon: 'danger',
-      },
+      message: `¿Estas seguro que deseas eliminar al especialista "${specialist.fullName}"?`,
+      icon: 'danger',
+
       buttons: [
         {
           label: 'Eliminar',
@@ -177,10 +176,8 @@ export function Specialists() {
         onError={showError}
       />
       <MessageModal
-        message={modal.message}
-        title={modal.title}
         open={modal.open}
-        icon={modal.icon}
+        data={modal.data}
         buttons={modal.buttons}
         onClose={closeAndResetModal}
       />

@@ -20,19 +20,15 @@ export function Register() {
 
     setIsError(false)
     openModal({
-      data: {
-        icon: 'info',
-        message: 'El paciente se registro correctamente',
-      },
+      icon: 'info',
+      message: 'El paciente se registro correctamente',
     })
   }
 
   const handleError = () => {
     openModal({
-      data: {
-        icon: 'error',
-        message: 'No se pudo registrar el paciente, intentelo nuevamente',
-      },
+      icon: 'error',
+      message: 'No se pudo registrar el paciente, intentelo nuevamente',
     })
     setIsError(true)
   }
@@ -50,13 +46,7 @@ export function Register() {
   return (
     <main className="bg-slate-300 min-h-dvh flex justify-center items-center p-10">
       <RegisterForm onSubmit={handleSubmit} onError={handleError} />
-      <MessageModal
-        open={modal.open}
-        message={modal.message}
-        title={modal.title}
-        icon={modal.icon}
-        onClose={handleClose}
-      />
+      <MessageModal open={modal.open} data={modal.data} onClose={handleClose} />
     </main>
   )
 }

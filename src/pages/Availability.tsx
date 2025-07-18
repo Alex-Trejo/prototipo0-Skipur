@@ -22,9 +22,12 @@ export function Availability() {
   })
 
   const [editable, setIsEditableSchedule] = useState(false)
-  const { modal, openModal, closeAndResetModal } = useMessageModal({
+
+  const { modal, openModal, closeModal } = useMessageModal({
     title: 'Disponibilidad',
   })
+
+  const closeAndResetModal = () => closeModal({ reset: true })
 
   const [events, setEvents] = useState<ScheduleEvent[]>([])
 
@@ -94,28 +97,22 @@ export function Availability() {
 
       closeAndResetModal()
       openModal({
-        data: {
-          icon: 'info',
-          message: 'Horario actualizado correctamente',
-        },
+        icon: 'info',
+        message: 'Horario actualizado correctamente',
       })
       disableEditableSchedule()
     } catch {
       openModal({
-        data: {
-          icon: 'error',
-          message: 'No se pudieron guardar los cambios, intentelo más tarde',
-        },
+        icon: 'error',
+        message: 'No se pudieron guardar los cambios, intentelo más tarde',
       })
     }
   }
 
   const handleSave = () => {
     openModal({
-      data: {
-        message: '¿Estás seguro que deseas guardar los cambios?',
-        icon: 'question',
-      },
+      message: '¿Estás seguro que deseas guardar los cambios?',
+      icon: 'question',
       buttons: [
         {
           label: 'Guardar',
@@ -176,11 +173,9 @@ export function Availability() {
       <Schedule editable={editable} events={events} onSelect={handleSelect} />
 
       <MessageModal
-        message={modal.message}
-        title={modal.title}
-        buttons={modal.buttons}
-        icon={modal.icon}
         open={modal.open}
+        data={modal.data}
+        buttons={modal.buttons}
         onClose={closeAndResetModal}
       />
     </main>

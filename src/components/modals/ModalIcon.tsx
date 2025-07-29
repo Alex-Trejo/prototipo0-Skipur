@@ -1,6 +1,6 @@
 import { IconFactory } from '../factory/IconFactory'
 
-export type ModalIconType = 'info' | 'error' | 'danger' | 'question'
+export type ModalIconType = 'info' | 'error' | 'danger' | 'question' | 'success'
 
 interface ModalIconProps {
   icon: ModalIconType
@@ -16,6 +16,9 @@ export function ModalIcon({ icon }: ModalIconProps) {
     ),
     question: (
       <IconFactory name={icon} className={`${baseClass} text-blue-500`} />
+    ),
+    success: (
+      <IconFactory name={icon} className={`${baseClass} text-green-500`} />
     ),
   }
   return icons[icon] ?? icons.info

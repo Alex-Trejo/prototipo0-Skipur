@@ -67,7 +67,7 @@ export function Specialists() {
   const addSpecialist = async (form: FormValues) => {
     const specialist = mapToCreateSpecialist(form)
     await createSpecialist(specialist)
-    closeSpecialistModal()
+    //closeSpecialistModal()
   }
 
   const modifySpecialist = async (form: FormValues) => {
@@ -81,7 +81,7 @@ export function Specialists() {
     const specialist = mapToUpdateSpecialist(form)
     await updateSpecialist(id, specialist)
 
-    closeSpecialistModal()
+    //closeSpecialistModal()
   }
 
   const removeSpecialist = async (id: string) => {
@@ -93,18 +93,57 @@ export function Specialists() {
     }
   }
 
+  //v1
+  // const handleSubmit = async (
+  //   form: FormValues,
+  //   mode: SpecialistModalData['mode']
+  // ) => {
+  //   switch (mode) {
+  //     case 'add':
+  //       await addSpecialist(form)
+  //       break
+
+  //     case 'edit':
+  //       await modifySpecialist(form)
+  //       break
+  //   }
+  // }
+
+  //v2
+  // En Specialists.tsx
+
   const handleSubmit = async (
     form: FormValues,
     mode: SpecialistModalData['mode']
   ) => {
-    switch (mode) {
-      case 'add':
-        await addSpecialist(form)
-        break
+    // Usamos un bloque try...catch para manejar tanto el éxito como el error
+    try {
+      switch (mode) {
+        case 'add':
+          await addSpecialist(form)
+          break
 
-      case 'edit':
-        await modifySpecialist(form)
-        break
+        case 'edit':
+          await modifySpecialist(form)
+          break
+      }
+
+      // --- Flujo de Éxito ---
+      // 1. Si llegamos aquí, la operación (add o modify) fue exitosa.
+      // 2. Cerramos el modal del formulario.
+      closeSpecialistModal()
+      // 3. Mostramos el modal de éxito correspondiente.
+      if (mode) {
+        showSuccess(mode)
+      }
+    } catch (error) {
+      // --- Flujo de Error ---
+      // 1. Si algo falla en addSpecialist o modifySpecialist, caemos aquí.
+      console.error(`Error al ${mode} especialista:`, error)
+      // 2. Mostramos el modal de error correspondiente.
+      if (mode) {
+        showError(mode)
+      }
     }
   }
 
@@ -120,6 +159,26 @@ export function Specialists() {
     openModal({
       message: messages[mode],
       icon: 'error',
+    })
+  }
+
+  const showSuccess = (mode: 'add' | 'edit' | 'delete') => {
+    const messages: Record<typeof mode, string> = {
+      add: '¡Especialista creado con éxito! Se han enviado las credenciales de acceso al correo electrónico proporcionado.',
+      edit: 'La información del especialista ha sido actualizada correctamente.',
+      delete: 'El especialista ha sido eliminado (desactivado) exitosamente.',
+    }
+
+    openModal({
+      title: 'Operación Exitosa', // Un título diferente para el éxito
+      message: messages[mode],
+      icon: 'success', // Un ícono de éxito
+      buttons: [
+        {
+          label: 'Aceptar',
+          onClick: closeAndResetModal,
+        },
+      ],
     })
   }
 

@@ -1,4 +1,4 @@
-import { FaCheck, FaEdit, FaStethoscope, FaTrash } from 'react-icons/fa'
+import { FaCheck, FaCheckCircle, FaEdit, FaStethoscope, FaTrash } from 'react-icons/fa'
 import { FaUserDoctor, FaXmark } from 'react-icons/fa6'
 import { ImSpinner8 } from 'react-icons/im'
 import {
@@ -25,6 +25,7 @@ const ICONS = {
   invalid: FaXmark,
   edit: FaEdit,
   trash: FaTrash,
+  success: FaCheckCircle,
 }
 
 type IconName = keyof typeof ICONS

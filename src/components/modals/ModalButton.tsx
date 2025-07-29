@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-type ModalButtonStyle = 'primary' | 'secondary' | 'danger' | 'error'
+type ModalButtonStyle = 'primary' | 'secondary' | 'danger' | 'error' | 'success'
 
 export interface ModalButtonProps {
   label: string
@@ -25,6 +25,9 @@ export function ModalButton({
 
       case 'error':
         return 'bg-red-500 text-white'
+
+      case 'success':
+        return 'bg-green-500 text-white'
 
       case 'primary':
       default:

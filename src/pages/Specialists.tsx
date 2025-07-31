@@ -67,7 +67,6 @@ export function Specialists() {
   const addSpecialist = async (form: FormValues) => {
     const specialist = mapToCreateSpecialist(form)
     await createSpecialist(specialist)
-    //closeSpecialistModal()
   }
 
   const modifySpecialist = async (form: FormValues) => {
@@ -80,8 +79,6 @@ export function Specialists() {
 
     const specialist = mapToUpdateSpecialist(form)
     await updateSpecialist(id, specialist)
-
-    //closeSpecialistModal()
   }
 
   const removeSpecialist = async (id: string) => {
@@ -93,30 +90,10 @@ export function Specialists() {
     }
   }
 
-  //v1
-  // const handleSubmit = async (
-  //   form: FormValues,
-  //   mode: SpecialistModalData['mode']
-  // ) => {
-  //   switch (mode) {
-  //     case 'add':
-  //       await addSpecialist(form)
-  //       break
-
-  //     case 'edit':
-  //       await modifySpecialist(form)
-  //       break
-  //   }
-  // }
-
-  //v2
-  // En Specialists.tsx
-
   const handleSubmit = async (
     form: FormValues,
     mode: SpecialistModalData['mode']
   ) => {
-    // Usamos un bloque try...catch para manejar tanto el éxito como el error
     try {
       switch (mode) {
         case 'add':
@@ -128,19 +105,14 @@ export function Specialists() {
           break
       }
 
-      // --- Flujo de Éxito ---
-      // 1. Si llegamos aquí, la operación (add o modify) fue exitosa.
-      // 2. Cerramos el modal del formulario.
       closeSpecialistModal()
-      // 3. Mostramos el modal de éxito correspondiente.
+
       if (mode) {
         showSuccess(mode)
       }
     } catch (error) {
-      // --- Flujo de Error ---
-      // 1. Si algo falla en addSpecialist o modifySpecialist, caemos aquí.
       console.error(`Error al ${mode} especialista:`, error)
-      // 2. Mostramos el modal de error correspondiente.
+
       if (mode) {
         showError(mode)
       }
@@ -170,9 +142,9 @@ export function Specialists() {
     }
 
     openModal({
-      title: 'Operación Exitosa', // Un título diferente para el éxito
+      title: 'Operación Exitosa',
       message: messages[mode],
-      icon: 'success', // Un ícono de éxito
+      icon: 'success',
       buttons: [
         {
           label: 'Aceptar',

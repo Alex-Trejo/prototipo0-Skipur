@@ -32,7 +32,8 @@ export function SpecialtiesTable({
             <tr>
               <td colSpan={COLUMNS}>
                 <span className="inline-flex items-center gap-x-2">
-                  <IconFactory name="loading" /> Cargando
+                  <IconFactory name="loading" className="animate-spin" />{' '}
+                  Cargando
                 </span>
               </td>
             </tr>

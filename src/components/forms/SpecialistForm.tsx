@@ -215,7 +215,13 @@ export function SpecialistForm({
             disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
-              {isSubmitting && <IconFactory name="loading" color="white" />}
+              {isSubmitting && (
+                <IconFactory
+                  name="loading"
+                  color="white"
+                  className="animate-spin"
+                />
+              )}
               {isSubmitting ? 'Guardando' : 'Guardar'}
             </span>
           </button>

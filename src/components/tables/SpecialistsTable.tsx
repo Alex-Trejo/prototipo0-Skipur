@@ -39,7 +39,8 @@ export function SpecialistsTable({
             <tr>
               <td colSpan={COLUMNS}>
                 <span className="inline-flex items-center gap-x-2">
-                  <IconFactory name="loading" /> Cargando
+                  <IconFactory name="loading" className="animate-spin" />{' '}
+                  Cargando
                 </span>
               </td>
             </tr>
@@ -51,7 +52,10 @@ export function SpecialistsTable({
                 <td>{specialist.title}</td>
                 <td>
                   {getSpecialty(specialist.specialtyId)?.name ?? (
-                    <IconFactory name="loading" className="mx-auto" />
+                    <IconFactory
+                      name="loading"
+                      className="mx-auto animate-spin"
+                    />
                   )}
                 </td>
                 <td className="column-center">

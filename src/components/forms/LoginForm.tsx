@@ -82,7 +82,13 @@ export function LoginForm({ onSubmit, onError }: Props) {
             disabled={isSubmitting}
           >
             <span className="inline-flex gap-x-2 items-center">
-              {isSubmitting && <IconFactory name="loading" color="white" />}
+              {isSubmitting && (
+                <IconFactory
+                  name="loading"
+                  color="white"
+                  className="animate-spin"
+                />
+              )}
               {isSubmitting ? 'Verificando' : 'Iniciar Sesión'}
             </span>
           </button>

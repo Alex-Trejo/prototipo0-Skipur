@@ -49,7 +49,8 @@ export function Schedule({
     <div className="relative">
       {loading && (
         <span className="absolute top-0 bottom-0 left-0 right-0 items-center justify-center gap-x-2 flex z-10 pointer-events-non backdrop-blur-xs">
-          <IconFactory name="loading" /> <p>Cargando</p>
+          <IconFactory name="loading" className="animate-spin" />{' '}
+          <p>Cargando</p>
         </span>
       )}
       <FullCalendar

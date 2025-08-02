@@ -15,6 +15,7 @@ import {
   MdOutlineWarning,
 } from 'react-icons/md'
 import { RiCalendarScheduleFill } from 'react-icons/ri'
+import { AiOutlineSchedule } from 'react-icons/ai'
 
 const ICONS = {
   loading: ImSpinner8,
@@ -32,6 +33,7 @@ const ICONS = {
   edit: FaEdit,
   trash: FaTrash,
   success: FaCheckCircle,
+  calendarCheck: AiOutlineSchedule,
 }
 
 type IconName = keyof typeof ICONS

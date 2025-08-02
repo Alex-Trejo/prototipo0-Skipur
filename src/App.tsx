@@ -3,6 +3,7 @@ import './App.css'
 import {
   AdminHome,
   Availability,
+  ClientHome,
   Login,
   NotFound,
   Register,
@@ -10,7 +11,11 @@ import {
   Specialists,
   Specialties,
 } from './pages'
-import { AdminLayout, SpecialistLayout } from './components/layouts'
+import {
+  AdminLayout,
+  ClientLayout,
+  SpecialistLayout,
+} from './components/layouts'
 import { AuthProvider, ProtectedRoute } from './components/auth'
 
 function App() {
@@ -32,6 +37,12 @@ function App() {
           <Route path="/specialist" element={<SpecialistLayout />}>
             <Route index element={<SpecialistHome />} />
             <Route path="availability" element={<Availability />} />
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRoles={['CLIENTE']} />}>
+          <Route path="/client" element={<ClientLayout />}>
+            <Route index element={<ClientHome />} />
           </Route>
         </Route>
 

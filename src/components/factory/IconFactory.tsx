@@ -8,6 +8,7 @@ import {
 import { FaUserDoctor, FaXmark } from 'react-icons/fa6'
 import { ImSpinner8 } from 'react-icons/im'
 import {
+  MdCancelScheduleSend,
   MdLogout,
   MdOutlineError,
   MdOutlineInfo,
@@ -34,6 +35,7 @@ const ICONS = {
   trash: FaTrash,
   success: FaCheckCircle,
   calendarCheck: AiOutlineSchedule,
+  scheduleCancel: MdCancelScheduleSend,
 }
 
 type IconName = keyof typeof ICONS

@@ -3,6 +3,7 @@ import './App.css'
 import {
   AdminHome,
   Availability,
+  ClientAppointments,
   ClientHome,
   Login,
   NotFound,
@@ -43,6 +44,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['CLIENTE']} />}>
           <Route path="/client" element={<ClientLayout />}>
             <Route index element={<ClientHome />} />
+            <Route path="appointments" element={<ClientAppointments />} />
           </Route>
         </Route>
 

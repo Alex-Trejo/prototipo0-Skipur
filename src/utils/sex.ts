@@ -8,7 +8,7 @@ export function getSexLabel(sex: Sex): string {
     OTRO: 'Otro',
   }
 
-  return dictionary[sex as Sex] ?? 'Desconocido'
+  return dictionary[sex] ?? 'Desconocido'
 }
 
 export function getSexOptions(): SexOption[] {

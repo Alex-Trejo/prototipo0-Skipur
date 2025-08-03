@@ -1,6 +1,7 @@
 import {
   createSpecialistRequest,
   deleteSpecialistRequest,
+  getSpecialistByIdRequest,
   getSpecialistsRequest,
   updateSpecialistRequest,
 } from '../api/specialist'
@@ -52,6 +53,15 @@ export async function updateSpecialistService(
 export async function deleteSpecialistService(id: string) {
   try {
     await deleteSpecialistRequest(id)
+  } catch {
+    throw new Error('No se pudo eliminar el especialista')
+  }
+}
+
+export async function getSpecialistByIdService(id: string) {
+  try {
+    const dto = await getSpecialistByIdRequest(id)
+    return mapFromSpecialistDto(dto)
   } catch {
     throw new Error('No se pudo eliminar el especialista')
   }

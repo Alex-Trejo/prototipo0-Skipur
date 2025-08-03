@@ -7,6 +7,13 @@ export interface Specialist extends User {
   title: string
 }
 
+export interface SpecialistProfileDto {
+  user_id: string
+  specialty_id: string
+  title: string
+  created_at: string
+}
+
 export interface SpecialistDto {
   id: string
   email: string
@@ -16,12 +23,7 @@ export interface SpecialistDto {
   is_active: boolean
   created_at: string
   updated_at: string
-  specialist_profile: {
-    user_id: string
-    specialty_id: string
-    title: string
-    created_at: string
-  }
+  specialist_profile: SpecialistProfileDto
 }
 
 export interface CreateSpecialist {

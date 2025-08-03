@@ -45,3 +45,10 @@ export async function updateSpecialistRequest(
 export async function deleteSpecialistRequest(id: string): Promise<void> {
   await api.delete(`/specialists/${id}`)
 }
+
+export async function getSpecialistByIdRequest(
+  id: string
+): Promise<SpecialistDto> {
+  const response = await api.get(`/specialists/${id}`)
+  return response.data as SpecialistDto
+}

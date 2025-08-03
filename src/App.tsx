@@ -8,6 +8,7 @@ import {
   Login,
   NotFound,
   Register,
+  ScheduleAppointment,
   SpecialistHome,
   Specialists,
   Specialties,
@@ -45,6 +46,10 @@ function App() {
           <Route path="/client" element={<ClientLayout />}>
             <Route index element={<ClientHome />} />
             <Route path="appointments" element={<ClientAppointments />} />
+            <Route
+              path="schedule-appointment"
+              element={<ScheduleAppointment />}
+            />
           </Route>
         </Route>
 

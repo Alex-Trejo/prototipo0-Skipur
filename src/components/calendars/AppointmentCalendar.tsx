@@ -1,14 +1,21 @@
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import esLocale from '@fullcalendar/core/locales/es'
-import type {
-  AllowFunc,
-  DateSelectArg,
-  DurationInput,
-} from '@fullcalendar/core/index.js'
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { IconFactory } from '../factory/IconFactory'
+
+export interface AppointmentEvent {
+  id: string
+  start: Date
+  end: Date
+  color?: string
+  backgroundColor?: string
+  borderColor?: string
+  textColor?: string
+  display?: string
+}
 
 export interface ScheduleEvent {
   id: string
@@ -18,32 +25,34 @@ export interface ScheduleEvent {
 }
 
 interface Props {
-  events?: ScheduleEvent[]
-  editable?: boolean
+  appointments: AppointmentEvent[]
+  schedule: ScheduleEvent[]
   loading?: boolean
-  minTime?: DurationInput
-  maxTime?: DurationInput
-  onSelect?: (arg: { start: Date; end: Date }) => Promise<void> | void
+  minTime?: string
+  maxTime?: string
 }
 
-export function Schedule({
-  events,
-  editable = false,
+export function AppointmentCalendar({
+  schedule,
+  appointments,
   loading = false,
   minTime = '05:00:00',
   maxTime = '21:00:00',
-  onSelect,
 }: Props) {
   const ref = useRef<FullCalendar>(null)
 
-  const handleSelectAllow: AllowFunc = ({ start, end }) => {
-    const isSameDay = start.getDay() === end.getDay()
-    return isSameDay
+  const handleNavLinkDay = (date: Date) => {
+    const isTimeGridWeekView =
+      ref.current?.getApi().view.type === 'timeGridWeek'
+
+    ref.current
+      ?.getApi()
+      .changeView(isTimeGridWeekView ? 'timeGridDay' : 'timeGridWeek', date)
   }
 
-  const handleDateSelect = ({ start, end }: DateSelectArg) => {
-    onSelect?.({ start, end })
-  }
+  const events = useMemo(() => {
+    return [...schedule, ...appointments]
+  }, [schedule, appointments])
 
   return (
     <div className="relative">
@@ -55,22 +64,23 @@ export function Schedule({
       )}
       <FullCalendar
         ref={ref}
-        plugins={[timeGridPlugin, interactionPlugin]}
+        plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
         locale={esLocale}
         initialView="timeGridWeek"
         firstDay={0}
         allDaySlot={false}
-        headerToolbar={false}
-        dayHeaderFormat={{ weekday: 'long' }}
+        height={'auto'}
         slotLabelFormat={{ hour: '2-digit', minute: '2-digit', hour12: false }}
         slotMinTime={minTime}
         slotMaxTime={maxTime}
-        height={'auto'}
         stickyHeaderDates={false}
-        selectOverlap={false}
-        selectable={editable}
-        selectAllow={handleSelectAllow}
-        select={handleDateSelect}
+        navLinks
+        navLinkDayClick={handleNavLinkDay}
+        headerToolbar={{
+          left: 'dayGridMonth',
+          center: 'title',
+          right: 'today prev next',
+        }}
         events={events}
       />
     </div>

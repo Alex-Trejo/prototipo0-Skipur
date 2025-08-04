@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Schedule } from '../components/calendars'
 import { useAuth } from '../hooks/useAuth'
 import { useAvailabilities } from '../hooks/useAvailabilities'
-import { getEndWeek } from '../utils/date'
 import type { ScheduleEvent } from '../components/calendars/Schedule'
 import { useMessageModal } from '../hooks/useMessageModal'
 import { MessageModal } from '../components/modals/MessageModal'
@@ -11,14 +10,8 @@ import type { CreateAvailability } from '../types/availability'
 export function Availability() {
   const { authUser } = useAuth()
 
-  const currentSunday = useMemo(() => {
-    const firstDay = 1
-    return getEndWeek(firstDay)
-  }, [])
-
   const { availabilities, createAvailability } = useAvailabilities({
     userId: authUser?.id,
-    end: currentSunday,
   })
 
   const [editable, setIsEditableSchedule] = useState(false)
@@ -41,7 +34,8 @@ export function Availability() {
         start: a.startTime,
         end: a.endTime,
         id: a.id,
-        color: 'seagreen',
+        backgroundColor: a.isBooked ? '#f87171' : '#a3e635',
+        borderColor: a.isBooked ? '#f87171' : '#a3e635',
       }))
     )
   }, [availabilities])

@@ -10,6 +10,10 @@ import {
   getAvailablityBySpecialistIdService,
   updateAvailabilityService,
 } from '../services/availability'
+import { getEndWeek, getStartWeek } from '../utils/date'
+
+const currentMonday = getStartWeek()
+const currentSunday = getEndWeek()
 
 interface Options {
   userId?: string
@@ -17,7 +21,11 @@ interface Options {
   end?: Date
 }
 
-export function useAvailabilities({ userId, start, end }: Options) {
+export function useAvailabilities({
+  userId,
+  start = currentMonday,
+  end = currentSunday,
+}: Options) {
   const [availabilities, setAvailabilities] = useState<Availability[]>([])
   const [loading, setLoading] = useState(true)
 

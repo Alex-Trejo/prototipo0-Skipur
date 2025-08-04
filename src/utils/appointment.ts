@@ -52,3 +52,16 @@ export function mapFromUserAppointmentDto(
     updatedAt: new Date(dto.updated_at),
   }
 }
+
+export function getAppointmentStatusColor(status: AppointmentStatus): string {
+  const dictionary: Record<AppointmentStatus, string> = {
+    AGENDADA: '#3b82f6',
+    CANCELADA: '#ef4444',
+    COMPLETADA: '#6b7280',
+    NO_ASISTIO: '#f97316',
+    PENDIENTE_VERIFICACION: '#eab308',
+    RESERVADA: '#22c55e',
+  }
+
+  return dictionary[status] ?? '#6b7280'
+}

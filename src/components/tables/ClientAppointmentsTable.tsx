@@ -1,5 +1,9 @@
 import type { UserAppointment } from '../../types/appointment'
-import { getAppointmentStatusLabel } from '../../utils/appointment'
+import {
+  getAppointmentStatusColor,
+  getAppointmentStatusLabel,
+} from '../../utils/appointment'
+import { formatHour } from '../../utils/date'
 import { IconFactory } from '../factory/IconFactory'
 
 interface Props {
@@ -39,11 +43,22 @@ export function ClientAppointmentsTable({ appointments, loading }: Props) {
                   {appointment.availability.startTime.toLocaleDateString()}
                 </td>
                 <td>
-                  {appointment.availability.startTime.toLocaleTimeString()} -{' '}
-                  {appointment.availability.endTime.toLocaleTimeString()}
+                  {formatHour(appointment.availability.startTime)} -{' '}
+                  {formatHour(appointment.availability.endTime)}
                 </td>
                 <td>{appointment.specialistName}</td>
-                <td>{getAppointmentStatusLabel(appointment.status)}</td>
+                <td className="column-center">
+                  <span
+                    className={`rounded-xl px-2 py-1`}
+                    style={{
+                      backgroundColor: getAppointmentStatusColor(
+                        appointment.status
+                      ),
+                    }}
+                  >
+                    {getAppointmentStatusLabel(appointment.status)}
+                  </span>
+                </td>
                 <td>
                   <div className="flex gap-x-3 items-center justify-center">
                     <button

@@ -46,9 +46,11 @@ export function SpecialistSelect({ id, name, onChange }: Props) {
       <option value="">Seleccionar especialista</option>
       {Object.entries(specialistsGroupBySpecialty).map(
         ([specialtyId, specialists]) => (
-          <optgroup label={getSpecialty(specialtyId)?.name}>
+          <optgroup key={specialtyId} label={getSpecialty(specialtyId)?.name}>
             {specialists.map((specialist) => (
-              <option value={specialist.id}>{specialist.fullName}</option>
+              <option key={specialist.id} value={specialist.id}>
+                {specialist.fullName}
+              </option>
             ))}
           </optgroup>
         )

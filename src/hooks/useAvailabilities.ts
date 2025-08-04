@@ -27,7 +27,7 @@ export function useAvailabilities({
   end = currentSunday,
 }: Options) {
   const [availabilities, setAvailabilities] = useState<Availability[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (!userId?.length) {

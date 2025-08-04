@@ -12,10 +12,7 @@ import { MessageModal } from '../components/modals/MessageModal'
 import { useMessageModal } from '../hooks/useMessageModal'
 
 export function ScheduleAppointment() {
-  const [specialistId, setSpecialtyId] = useState<string>(
-    // TODO: remove hardcode specialist id
-    'dcdce320-b1d6-4536-8fe4-44fe7f7e8717'
-  )
+  const [specialistId, setSpecialtyId] = useState<string>('')
 
   const [availabilityRange, setAvailabilityRange] = useState({
     start: getStartWeek(),

@@ -5,12 +5,12 @@ import interactionPlugin from '@fullcalendar/interaction'
 import esLocale from '@fullcalendar/core/locales/es'
 import { useMemo, useRef } from 'react'
 import { IconFactory } from '../factory/IconFactory'
+import type { DatesSetArg } from '@fullcalendar/core/index.js'
 
 export interface AppointmentEvent {
   id: string
   start: Date
   end: Date
-  color?: string
   backgroundColor?: string
   borderColor?: string
   textColor?: string
@@ -30,6 +30,7 @@ interface Props {
   loading?: boolean
   minTime?: string
   maxTime?: string
+  onDateChange?: ({ start, end }: { start: Date; end: Date }) => Promise<void>
 }
 
 export function AppointmentCalendar({
@@ -38,16 +39,23 @@ export function AppointmentCalendar({
   loading = false,
   minTime = '05:00:00',
   maxTime = '21:00:00',
+  onDateChange,
 }: Props) {
   const ref = useRef<FullCalendar>(null)
 
-  const handleNavLinkDay = (date: Date) => {
-    const isTimeGridWeekView =
-      ref.current?.getApi().view.type === 'timeGridWeek'
+  const handleNavLinkDay = async (date: Date) => {
+    const calendarApi = ref.current?.getApi()
+    if (!calendarApi) return
 
-    ref.current
-      ?.getApi()
-      .changeView(isTimeGridWeekView ? 'timeGridDay' : 'timeGridWeek', date)
+    const currentView = calendarApi.view.type
+    const isWeekView = currentView === 'timeGridWeek'
+
+    const nextView = isWeekView ? 'timeGridDay' : 'timeGridWeek'
+    calendarApi.changeView(nextView, date)
+  }
+
+  const handleDateChange = async (arg: DatesSetArg) => {
+    await onDateChange?.({ start: arg.start, end: arg.end })
   }
 
   const events = useMemo(() => {
@@ -76,8 +84,9 @@ export function AppointmentCalendar({
         stickyHeaderDates={false}
         navLinks
         navLinkDayClick={handleNavLinkDay}
+        datesSet={handleDateChange}
         headerToolbar={{
-          left: 'dayGridMonth',
+          left: 'dayGridMonth timeGridWeek',
           center: 'title',
           right: 'today prev next',
         }}

@@ -4,21 +4,39 @@ import { SpecialistSelect } from '../components/selects/SpecialistSelect'
 import { useAvailabilities } from '../hooks/useAvailabilities'
 import { useUserAppointments } from '../hooks/useUserAppointments'
 import { getAppointmentStatusColor } from '../utils/appointment'
+import { getEndWeek, getStartWeek } from '../utils/date'
 
 export function ScheduleAppointment() {
-  const [specialistId, setSpecialtyId] = useState(
+  const [specialistId, setSpecialtyId] = useState<string>(
+    // TODO: remove hardcode specialist id
     'dcdce320-b1d6-4536-8fe4-44fe7f7e8717'
   )
 
+  const [availabilityRange, setAvailabilityRange] = useState({
+    start: getStartWeek(),
+    end: getEndWeek(),
+  })
+
   const { availabilities, loading: loadingAvailabilities } = useAvailabilities({
-    // TODO: replace for dynamic id of specialist select
     userId: specialistId,
+    start: availabilityRange.start,
+    end: availabilityRange.end,
   })
 
   const { appointments, loading: loadingAppointments } = useUserAppointments()
 
   const handleSpecialtySelectChange = (id: string) => {
     setSpecialtyId(id)
+  }
+
+  const handleDateChange = async ({
+    start,
+    end,
+  }: {
+    start: Date
+    end: Date
+  }) => {
+    setAvailabilityRange({ start, end })
   }
 
   const schedule = useMemo(() => {
@@ -53,6 +71,7 @@ export function ScheduleAppointment() {
           appointments={appointmentsEvents}
           schedule={schedule}
           loading={loadingAppointments || loadingAvailabilities}
+          onDateChange={handleDateChange}
         />
       </div>
     </main>

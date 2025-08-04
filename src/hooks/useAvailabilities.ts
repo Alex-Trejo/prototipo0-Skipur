@@ -30,7 +30,11 @@ export function useAvailabilities({
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!userId) return
+    if (!userId?.length) {
+      return
+    }
+
+    setLoading(true)
 
     getAvailablityBySpecialistIdService(userId, { start, end })
       .then((a) => setAvailabilities(a))

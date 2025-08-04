@@ -2,6 +2,7 @@ import {
   FaCheck,
   FaCheckCircle,
   FaEdit,
+  FaSquare,
   FaStethoscope,
   FaTrash,
 } from 'react-icons/fa'
@@ -36,6 +37,7 @@ const ICONS = {
   success: FaCheckCircle,
   calendarCheck: AiOutlineSchedule,
   scheduleCancel: MdCancelScheduleSend,
+  square: FaSquare,
 }
 
 type IconName = keyof typeof ICONS

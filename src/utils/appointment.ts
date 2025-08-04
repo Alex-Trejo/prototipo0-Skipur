@@ -1,3 +1,4 @@
+import { APPOINTMENT_STATUS } from '../constants/appointment'
 import type {
   Appointment,
   AppointmentDto,
@@ -64,4 +65,11 @@ export function getAppointmentStatusColor(status: AppointmentStatus): string {
   }
 
   return dictionary[status] ?? '#6b7280'
+}
+
+export function getAppointmentStatuses(): { color: string; label: string }[] {
+  return APPOINTMENT_STATUS.map((status) => ({
+    color: getAppointmentStatusColor(status),
+    label: getAppointmentStatusLabel(status),
+  }))
 }

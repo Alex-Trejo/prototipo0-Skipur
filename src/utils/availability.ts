@@ -35,3 +35,11 @@ export function mapToUpdateAvailabilityDto(
     start_time: availability.startTime.toISOString(),
   }
 }
+
+export function getAvailabilityStatusColor(isBooked: boolean) {
+  return isBooked ? '#f87171' : '#a3e635'
+}
+
+export function getAvailabilityStatusLabel(isBooked: boolean) {
+  return isBooked ? 'Reservado' : 'Disponible'
+}

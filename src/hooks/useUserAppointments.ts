@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { UserAppointment } from '../types/appointment'
-import { getMyAppointmentsService } from '../services/appointment'
+import {
+  getMyAppointmentsService,
+  reserveAppointmentService,
+} from '../services/appointment'
 import { useAuth } from './useAuth'
 
 export function useUserAppointments() {
@@ -9,16 +12,29 @@ export function useUserAppointments() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getMyAppointmentsService()
-      .then((appointments) => setAppointments(appointments))
-      .catch(() => setAppointments([]))
-      .finally(() => setLoading(false))
+    loadData()
   }, [])
 
+  const loadData = async () => {
+    try {
+      const appointments = await getMyAppointmentsService()
+      setAppointments(appointments)
+    } catch {
+      setAppointments([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const refetch = () => loadData()
+
   const reserveAppointment = async (availabilityId: string) => {
-    // TODO: create service to reserve appointment
-    console.log('availability reserve', availabilityId)
-    console.log('patient id', authUser?.id)
+    if (!authUser) {
+      return
+    }
+
+    await reserveAppointmentService({ availabilityId, patiendId: authUser.id })
+    refetch()
   }
 
   return {

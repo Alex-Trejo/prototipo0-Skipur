@@ -3,6 +3,8 @@ import type {
   Appointment,
   AppointmentDto,
   AppointmentStatus,
+  ReserveAppointment,
+  ReserveAppointmentDto,
   UserAppointment,
   UserAppointmentDto,
 } from '../types/appointment'
@@ -72,4 +74,13 @@ export function getAppointmentStatuses(): { color: string; label: string }[] {
     color: getAppointmentStatusColor(status),
     label: getAppointmentStatusLabel(status),
   }))
+}
+
+export function mapToReserveAppointmentDto(
+  appointment: ReserveAppointment
+): ReserveAppointmentDto {
+  return {
+    availability_id: appointment.availabilityId,
+    patiend_id: appointment.patiendId,
+  }
 }

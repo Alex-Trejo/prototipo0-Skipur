@@ -125,9 +125,9 @@ export function AppointmentCalendar({
     <div className="relative">
       <div className="flex flex-row gap-x-3 flex-wrap mb-4">
         {getAppointmentStatuses().map(({ color, label }) => (
-          <div className="flex flex-row items-center gap-x-1">
-            <span>{label}:</span>
+          <div key={label} className="flex flex-row items-center gap-x-1">
             <IconFactory name="square" color={color} />
+            <span>{label}</span>
           </div>
         ))}
       </div>
